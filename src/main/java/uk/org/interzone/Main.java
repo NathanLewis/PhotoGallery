@@ -28,11 +28,13 @@ public class Main
         });
 
         ArrayList<File> thumbnails = new ArrayList<File>();
-        for (File picfile : files) {
-            try {
-                thumbnails.add(res(picfile.getName(), photodir));
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (null != files) {
+            for (File picfile : files) {
+                try {
+                    thumbnails.add(res(picfile.getName(), photodir));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         GalleryUI galleryUI = new GalleryUI(thumbnails);

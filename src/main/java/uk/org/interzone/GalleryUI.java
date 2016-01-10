@@ -15,7 +15,6 @@ public class GalleryUI extends JFrame {
 
     public static final int BWIDTH = 120;
     public static final int BHEIGHT = 64;
-//            new ImageIcon[4];
 
     public GalleryUI(List<File> files) {
         super("Photo Gallery");
@@ -25,10 +24,14 @@ public class GalleryUI extends JFrame {
         super.setLayout(null);
         this.getContentPane().setBackground(Color.BLACK);
         int ind = 0;
-        final Border selected = new LineBorder(Color.YELLOW, 2);
+        final Border selectedBorder = new LineBorder(Color.YELLOW, 2);
+        if (files.size() == 0) {
+            return;
+        }
+        final Border emptyBorder = BorderFactory.createEmptyBorder();
         for (int j = 0; j < 7; j++) {
             for (int i = 0; i < 4; i++) {
-                final JButton button = new JButton("", new ImageIcon(files.get(ind).toString()));
+                final NButton button = new NButton("", new ImageIcon(files.get(ind).toString()), ind);
                 add(button);
                 button.setBounds(i * BWIDTH + i * BWIDTH / 5 + BWIDTH / 5, j * BHEIGHT + j * BHEIGHT / 5 + BHEIGHT / 5, BWIDTH, BHEIGHT);
                 button.addMouseMotionListener(new MouseAdapter() {
@@ -43,7 +46,13 @@ public class GalleryUI extends JFrame {
                 button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         // when the button is pressed
-                        button.setBorder(selected);
+                        if(button.bSelected) {
+//                            button.bSelected = false;
+//                            button.setBorder(emptyBorder);
+                        } else {
+                            button.setBorder(selectedBorder);
+                            button.bSelected = true;
+                        }
                     }
                 });
                 ind++;
