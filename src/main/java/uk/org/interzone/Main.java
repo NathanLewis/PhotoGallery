@@ -34,7 +34,7 @@ public class Main
 
         ArrayList<File> thumbnails = new ArrayList<File>();
         for (File picfile : files) {
-            System.out.println(picfile.toString());
+//            System.out.println(picfile.toString());
             try {
                 thumbnails.add(res(picfile.getName(), photodir));
             } catch (IOException e) {
@@ -53,7 +53,6 @@ public class Main
             dir.mkdir();
         }
         String pathname = thumbdir + sourceFilename;
-        System.out.println("output file: " + pathname);
         File outputFile = new File(pathname);
         if (outputFile.exists()) {
             return outputFile;
