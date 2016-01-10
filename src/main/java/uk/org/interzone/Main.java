@@ -1,15 +1,16 @@
 package uk.org.interzone;
 
-import org.imgscalr.Scalr;
-import org.imgscalr.Scalr.*;
-import java.awt.image.*;
-import java.io.*;
-import javax.imageio.*;
+//import org.imgscalr.Scalr;
+//import org.imgscalr.Scalr.*;
+//import java.awt.image.*;
+//import java.io.*;
+//import javax.imageio.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.imgscalr.Scalr.resize;
 
@@ -21,8 +22,9 @@ public class Main
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
-        File dir = new File("../photos");
+        System.out.println( "Working directory: " + System.getProperty("user.dir") );
+        String photodir = "./photos";
+        File dir = new File(photodir);
         File [] files = dir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -30,31 +32,40 @@ public class Main
             }
         });
 
+        ArrayList<File> thumbnails = new ArrayList<File>();
         for (File picfile : files) {
-            System.out.println(picfile);
             System.out.println(picfile.toString());
-            //            try {
-//                res(picfile.getName(),"../photos");
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                thumbnails.add(res(picfile.getName(), photodir));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
+        GalleryUI galleryUI = new GalleryUI(thumbnails);
     }
 
-    public static void res(String sourceFilename, String dirname) throws IOException {
+    public static File res(String sourceFilename, String dirname) throws IOException {
 
-        File sourceImageFile = new File(sourceFilename);
-        File outputFile = new File("thumbnails/" + sourceImageFile.getName());
+        File sourceImageFile = new File(dirname + "/" + sourceFilename);
+        String thumbdir = dirname + "/thumbnails/";
+        File dir = new File(thumbdir);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        String pathname = thumbdir + sourceFilename;
+        System.out.println("output file: " + pathname);
+        File outputFile = new File(pathname);
         if (outputFile.exists()) {
-            return;
+            return outputFile;
         }
         BufferedImage img = ImageIO.read(sourceImageFile);
 
-        BufferedImage thumbnail = resize(img, 500);
+        BufferedImage thumbnail = resize(img, GalleryUI.BWIDTH, GalleryUI.BHEIGHT);
 
         thumbnail.createGraphics().drawImage(thumbnail, 0, 0, null);
         ImageIO.write(thumbnail, "jpg", outputFile);
+        System.out.println("wrote " + outputFile);
+        return outputFile;
     }
 
 }

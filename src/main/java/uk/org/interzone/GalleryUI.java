@@ -2,11 +2,14 @@ package uk.org.interzone;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.File;
 import java.lang.String;
+import java.util.List;
+
 /**
  * Created by nathan on 09/01/16.
  */
-public class MovingButton extends JFrame {
+public class GalleryUI extends JFrame {
 
     public static final int BWIDTH = 120;
     public static final int BHEIGHT = 64;
@@ -18,14 +21,14 @@ public class MovingButton extends JFrame {
     };
 //            new ImageIcon[4];
 
-    public MovingButton() {
+    public GalleryUI(List<File> files) {
         super("Position helper");
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setSize(500, 520);
         super.setVisible(true);
         super.setLayout(null);
         for (int i = 0; i < 4; i++) {
-            final JButton button = new JButton("", myImages[i]);
+            final JButton button = new JButton("", new ImageIcon(files.get(i).toString()));
             add(button);
             button.setBounds(i * BWIDTH, BHEIGHT, BWIDTH, BHEIGHT);
             button.addMouseMotionListener(new MouseAdapter() {
