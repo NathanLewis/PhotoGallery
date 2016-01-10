@@ -1,10 +1,5 @@
 package uk.org.interzone;
 
-//import org.imgscalr.Scalr;
-//import org.imgscalr.Scalr.*;
-//import java.awt.image.*;
-//import java.io.*;
-//import javax.imageio.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -34,7 +29,6 @@ public class Main
 
         ArrayList<File> thumbnails = new ArrayList<File>();
         for (File picfile : files) {
-//            System.out.println(picfile.toString());
             try {
                 thumbnails.add(res(picfile.getName(), photodir));
             } catch (IOException e) {

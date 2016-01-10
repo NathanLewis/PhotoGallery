@@ -1,10 +1,11 @@
 package uk.org.interzone;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.lang.String;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class GalleryUI extends JFrame {
         super.setLayout(null);
         this.getContentPane().setBackground(Color.BLACK);
         int ind = 0;
+        final Border selected = new LineBorder(Color.YELLOW, 2);
         for (int j = 0; j < 7; j++) {
             for (int i = 0; i < 4; i++) {
                 final JButton button = new JButton("", new ImageIcon(files.get(ind).toString()));
@@ -36,6 +38,12 @@ public class GalleryUI extends JFrame {
                         int Y = E.getY() + button.getY();
                         System.out.println("X: " + X + "  Y: " + Y);
                         button.setBounds(X, Y, BWIDTH, BHEIGHT);
+                    }
+                });
+                button.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        // when the button is pressed
+                        button.setBorder(selected);
                     }
                 });
                 ind++;
