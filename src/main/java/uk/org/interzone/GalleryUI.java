@@ -1,13 +1,13 @@
 package uk.org.interzone;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by nathan on 09/01/16.
@@ -25,7 +25,7 @@ public class GalleryUI extends JFrame {
         super.setLayout(null);
         this.getContentPane().setBackground(Color.BLACK);
         int ind = 0;
-        final HashSet<NButton> selectedButtons = new HashSet<>();
+        final Set<NButton> selectedButtons = Collections.newSetFromMap(new ConcurrentHashMap<NButton, Boolean>());
         if (files.size() == 0) {
             return;
         }
@@ -45,9 +45,10 @@ public class GalleryUI extends JFrame {
                 });
                 button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        // when the button is pressed
-                        if(button.isSelected()) {
-//                            button.deselect();
+                        // when the shift button is pressed
+                        if((e.getModifiers() & InputEvent.SHIFT_MASK) != 0) {
+                            button.select();
+                            selectedButtons.add(button);
                         } else {
                             button.select();
                             for(NButton b : selectedButtons) {
