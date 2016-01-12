@@ -6,6 +6,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -24,11 +25,10 @@ public class GalleryUI extends JFrame {
         super.setLayout(null);
         this.getContentPane().setBackground(Color.BLACK);
         int ind = 0;
-        final Border selectedBorder = new LineBorder(Color.YELLOW, 2);
+        final HashSet<NButton> selectedButtons = new HashSet<>();
         if (files.size() == 0) {
             return;
         }
-        final Border emptyBorder = BorderFactory.createEmptyBorder();
         for (int j = 0; j < 7; j++) {
             for (int i = 0; i < 4; i++) {
                 final NButton button = new NButton("", new ImageIcon(files.get(ind).toString()), ind);
@@ -46,12 +46,15 @@ public class GalleryUI extends JFrame {
                 button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         // when the button is pressed
-                        if(button.bSelected) {
-//                            button.bSelected = false;
-//                            button.setBorder(emptyBorder);
+                        if(button.isSelected()) {
+//                            button.deselect();
                         } else {
-                            button.setBorder(selectedBorder);
-                            button.bSelected = true;
+                            button.select();
+                            for(NButton b : selectedButtons) {
+                                b.deselect();
+                                selectedButtons.remove(b);
+                            }
+                            selectedButtons.add(button);
                         }
                     }
                 });
