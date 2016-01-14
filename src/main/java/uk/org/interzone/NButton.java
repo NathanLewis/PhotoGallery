@@ -19,11 +19,12 @@ public class NButton  extends JButton {
         @Override
         public void keyTyped(KeyEvent e) {
             System.out.println("typed: " + e.getKeyChar());
+
         }
 
         @Override
         public void keyPressed(KeyEvent e) {
-//            System.out.println("pressed: " + e.getKeyChar());
+            System.out.println("pressed: " + e.getKeyChar());
         }
 
         @Override
