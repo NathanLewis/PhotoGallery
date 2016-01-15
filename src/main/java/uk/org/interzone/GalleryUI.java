@@ -31,7 +31,8 @@ public class GalleryUI extends JFrame {
         }
         for (int j = 0; j < 7; j++) {
             for (int i = 0; i < 4; i++) {
-                final NButton button = new NButton("", new ImageIcon(files.get(ind).toString()), ind);
+                String filename = files.get(ind).toString();
+                final NButton button = new NButton("", filename, ind);
                 add(button);
                 button.setBounds(i * BWIDTH + i * BWIDTH / 5 + BWIDTH / 5, j * BHEIGHT + j * BHEIGHT / 5 + BHEIGHT / 5, BWIDTH, BHEIGHT);
                 button.addMouseMotionListener(new MouseAdapter() {

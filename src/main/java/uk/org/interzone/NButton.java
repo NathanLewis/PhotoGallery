@@ -6,11 +6,13 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 /**
  * Created by nathan on 10/01/16.
  */
 public class NButton  extends JButton {
+    private final String imageFilename;
     protected boolean bSelected = false;
     protected int index;
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
@@ -18,7 +20,27 @@ public class NButton  extends JButton {
     protected KeyListener keyListener = new KeyListener() {
         @Override
         public void keyTyped(KeyEvent e) {
-            System.out.println("typed: " + e.getKeyChar());
+            char keyChar = e.getKeyChar();
+            System.out.println("typed: " + keyChar);
+            if('r' == keyChar || 'R' == keyChar) {
+                System.out.println("Rotating " + imageFilename + ", index " + index + " right");
+                try {
+                    ImageUtils.rotateRight(imageFilename);
+//                    reloadIcon();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            else if('l' == keyChar || 'L' == keyChar) {
+                System.out.println("Rotating " + imageFilename + ", index " + index + " right");
+                try {
+                    ImageUtils.rotateLeft(imageFilename);
+//                    reloadIcon();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
 
         }
 
@@ -33,11 +55,14 @@ public class NButton  extends JButton {
         }
     };
 
-    NButton() { super(); }
-
-    public NButton(String text, ImageIcon imageIcon, int ind) {
-        super(text, imageIcon);
+    public NButton(String text, String imageFilename, int ind) {
+        super(text, new ImageIcon(imageFilename));
+        this.imageFilename = imageFilename;
         this.index = ind;
+    }
+
+    protected void reloadIcon() {
+        super.setIcon(new ImageIcon(imageFilename));
     }
 
     public void select() {
