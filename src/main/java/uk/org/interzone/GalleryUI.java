@@ -14,8 +14,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GalleryUI extends JFrame {
 
-    public static final int BWIDTH = 120;
-    public static final int BHEIGHT = 64;
+    public static final int BWIDTH = 96;
+    public static final int BHEIGHT = 96;
+    public static int numRows = 6;
+    public static int numCols = 5;
 
     public GalleryUI(List<File> files) {
         super("Photo Gallery");
@@ -29,8 +31,8 @@ public class GalleryUI extends JFrame {
         if (files.size() == 0) {
             return;
         }
-        for (int j = 0; j < 7; j++) {
-            for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < numRows; j++) {
+            for (int i = 0; i < numCols; i++) {
                 String filename = files.get(ind).toString();
                 final NButton button = new NButton("", filename, ind);
                 add(button);
