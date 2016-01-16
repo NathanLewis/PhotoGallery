@@ -8,12 +8,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * Created by nathan on 10/01/16.
  */
 public class NButton  extends JButton {
-    private final String imageFilename;
+    protected final String imageFilename;
+    protected final Set<NButton> selectedButtons;
     protected boolean bSelected = false;
     protected int index;
     protected int X,Y, width, height;
@@ -25,17 +27,19 @@ public class NButton  extends JButton {
             char keyChar = e.getKeyChar();
             System.out.println("typed: " + keyChar);
             if('r' == keyChar || 'R' == keyChar) {
-                System.out.println("Rotating " + imageFilename + ", index " + index + " right");
                 try {
-                    rotateRight();
+                    for(NButton selected: selectedButtons) {
+                        selected.rotateRight();
+                    }
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
             else if('l' == keyChar || 'L' == keyChar) {
-                System.out.println("Rotating " + imageFilename + ", index " + index + " right");
                 try {
-                    rotateLeft();
+                    for(NButton selected: selectedButtons) {
+                        selected.rotateLeft();
+                    }
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -46,7 +50,7 @@ public class NButton  extends JButton {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            System.out.println("pressed: " + e.getKeyChar());
+
         }
 
         @Override
@@ -56,21 +60,24 @@ public class NButton  extends JButton {
     };
 
     void rotateLeft() throws IOException {
+        System.out.println("Rotating " + imageFilename + ", index " + index + " right");
         BufferedImage rotated = ImageUtils.rotateLeft(imageFilename);
         this.setBounds(X, Y, height, width);
         this.setIcon(new ImageIcon(rotated));
     }
 
     void rotateRight() throws IOException {
+        System.out.println("Rotating " + imageFilename + ", index " + index + " right");
         BufferedImage rotated = ImageUtils.rotateRight(imageFilename);
         this.setBounds(X, Y, height, width);
         this.setIcon(new ImageIcon(rotated));
     }
 
-    public NButton(String text, String imageFilename, int ind) {
+    public NButton(String text, String imageFilename, int ind, Set<NButton> selectedButtons) {
         super(text, new ImageIcon(imageFilename));
         this.imageFilename = imageFilename;
         this.index = ind;
+        this.selectedButtons = selectedButtons;
     }
 
     @Override
