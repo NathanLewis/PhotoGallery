@@ -16,7 +16,8 @@ public class GalleryUI extends JFrame {
 
     public static final int BWIDTH = 96;
     public static final int BHEIGHT = 54;
-    public static int numRows = 6;
+    public static final int BIGGEST = BWIDTH > BHEIGHT ? BWIDTH : BHEIGHT;
+    public static int numRows = 4;
     public static int numCols = 4;
 
     public GalleryUI(List<File> files) {
@@ -36,7 +37,7 @@ public class GalleryUI extends JFrame {
                 String filename = files.get(ind).toString();
                 final NButton button = new NButton("", filename, ind);
                 add(button);
-                button.setBounds(i * BWIDTH + i * BWIDTH / 2 + BWIDTH / 2, j * BHEIGHT + j * BHEIGHT / 2 + BHEIGHT / 2, BWIDTH, BHEIGHT);
+                button.setBounds(i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2, j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2, BWIDTH, BHEIGHT);
                 button.addMouseMotionListener(new MouseAdapter() {
                     // this works though the images lurch unless you grab them by the top left
                     public void mouseDragged(MouseEvent E) {

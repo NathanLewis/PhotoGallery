@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import static java.lang.System.load;
 import static org.imgscalr.Scalr.resize;
 
 /**
@@ -38,19 +37,21 @@ public class ImageUtils {
         return outputFile;
     }
 
-    public static void rotateRight(String sourceFilename) throws IOException {
+    public static BufferedImage rotateRight(String sourceFilename) throws IOException {
         File imageFile = new File(sourceFilename);
         BufferedImage bufferedImage = ImageIO.read(imageFile);
         BufferedImage rotated = Scalr.rotate(bufferedImage, Scalr.Rotation.CW_90);
         rotated.createGraphics().drawImage(rotated, 0, 0, null);
         ImageIO.write(rotated, "jpg", imageFile);
+        return rotated;
     }
 
-    public static void rotateLeft(String sourceFilename) throws IOException {
+    public static BufferedImage rotateLeft(String sourceFilename) throws IOException {
         File imageFile = new File(sourceFilename);
         BufferedImage bufferedImage = ImageIO.read(imageFile);
         BufferedImage rotated = Scalr.rotate(bufferedImage, Scalr.Rotation.CW_270);
         rotated.createGraphics().drawImage(rotated, 0, 0, null);
         ImageIO.write(rotated, "jpg", imageFile);
+        return rotated;
     }
 }

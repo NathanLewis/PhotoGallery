@@ -6,6 +6,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
@@ -15,6 +16,7 @@ public class NButton  extends JButton {
     private final String imageFilename;
     protected boolean bSelected = false;
     protected int index;
+    protected int X,Y, width, height;
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
     protected KeyListener keyListener = new KeyListener() {
@@ -25,8 +27,7 @@ public class NButton  extends JButton {
             if('r' == keyChar || 'R' == keyChar) {
                 System.out.println("Rotating " + imageFilename + ", index " + index + " right");
                 try {
-                    ImageUtils.rotateRight(imageFilename);
-//                    reloadIcon();
+                    rotateRight();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -34,8 +35,7 @@ public class NButton  extends JButton {
             else if('l' == keyChar || 'L' == keyChar) {
                 System.out.println("Rotating " + imageFilename + ", index " + index + " right");
                 try {
-                    ImageUtils.rotateLeft(imageFilename);
-//                    reloadIcon();
+                    rotateLeft();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -55,14 +55,31 @@ public class NButton  extends JButton {
         }
     };
 
+    void rotateLeft() throws IOException {
+        BufferedImage rotated = ImageUtils.rotateLeft(imageFilename);
+        this.setBounds(X, Y, height, width);
+        this.setIcon(new ImageIcon(rotated));
+    }
+
+    void rotateRight() throws IOException {
+        BufferedImage rotated = ImageUtils.rotateRight(imageFilename);
+        this.setBounds(X, Y, height, width);
+        this.setIcon(new ImageIcon(rotated));
+    }
+
     public NButton(String text, String imageFilename, int ind) {
         super(text, new ImageIcon(imageFilename));
         this.imageFilename = imageFilename;
         this.index = ind;
     }
 
-    protected void reloadIcon() {
-        super.setIcon(new ImageIcon(imageFilename));
+    @Override
+    public void setBounds(int x, int y, int width, int height) {
+        super.setBounds(x, y, width, height);
+        this.X = x;
+        this.Y = y;
+        this.width = width;
+        this.height = height;
     }
 
     public void select() {
