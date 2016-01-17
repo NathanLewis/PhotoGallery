@@ -19,6 +19,7 @@ public class GalleryUI extends JFrame {
     public static final int BIGGEST = BWIDTH > BHEIGHT ? BWIDTH : BHEIGHT;
     public static int numRows = 4;
     public static int numCols = 4;
+    final Set<NButton> selectedButtons;
 
     public GalleryUI(List<File> files) {
         super("Photo Gallery");
@@ -28,7 +29,7 @@ public class GalleryUI extends JFrame {
         super.setLayout(null);
         this.getContentPane().setBackground(Color.BLACK);
         int ind = 0;
-        final Set<NButton> selectedButtons = Collections.newSetFromMap(new ConcurrentHashMap<NButton, Boolean>());
+        selectedButtons = Collections.newSetFromMap(new ConcurrentHashMap<NButton, Boolean>());
         if (files.size() == 0) {
             return;
         }
@@ -66,7 +67,32 @@ public class GalleryUI extends JFrame {
                 ind++;
             }
         }
+        this.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                for(NButton b : selectedButtons) {
+                    b.deselect();
+                    selectedButtons.remove(b);
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
     }
-
-
 }
