@@ -38,18 +38,15 @@ public class GalleryUI extends JFrame {
                 String filename = files.get(ind).toString();
                 final NButton button = new NButton("", filename, ind, selectedButtons);
                 add(button);
-//                button.setBounds(i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2, j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2, BWIDTH, BHEIGHT);
-                button.setBounds(i * BIGGEST + i * BIGGEST / 2 , j * BIGGEST + j * BIGGEST / 2 , BWIDTH, BHEIGHT);
+                button.setBounds(i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2,
+                        j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2, BWIDTH, BHEIGHT);
+                
                 button.addMouseMotionListener(new MouseAdapter() {
                     // this works though the images lurch unless you grab them by the top left
                     public void mouseDragged(MouseEvent E) {
-                        int ex = E.getX();
-                        int bx = button.getX();
-                        int X = ex + bx - BWIDTH / 2;
-                        int ey = E.getY();
-                        int by = button.getY();
-                        int Y = ey + by - BHEIGHT / 2;
-                        System.out.println("EX: " + ex + " BX " + bx + "  EY: " + ey + " BY " + by);
+                        int X = E.getX() + button.getX() - BWIDTH / 2;  // - BWIDTH / 2  so we are dragging from the centre
+                        int Y = E.getY() + button.getY() - BHEIGHT / 2; // - BHEIGHT / 2  so we are dragging from the centre
+//                        System.out.println("X: " + X + "  Y: " + Y);
                         button.setBounds(X, Y, BWIDTH, BHEIGHT);
                     }
                 });
