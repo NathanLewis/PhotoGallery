@@ -40,7 +40,7 @@ public class GalleryUI extends JFrame {
                 add(button);
                 button.setBounds(i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2,
                         j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2, BWIDTH, BHEIGHT);
-                
+
                 button.addMouseMotionListener(new MouseAdapter() {
                     // this works though the images lurch unless you grab them by the top left
                     public void mouseDragged(MouseEvent E) {

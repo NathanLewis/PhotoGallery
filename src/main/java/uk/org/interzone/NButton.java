@@ -1,5 +1,7 @@
 package uk.org.interzone;
 
+import uk.co.jaimon.test.SimpleImageInfo;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -7,6 +9,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
@@ -126,6 +129,12 @@ public class NButton extends JButton {
         this.setBorder(selectedBorder);
         this.addKeyListener(keyListener);
         this.bSelected = true;
+        try {
+            SimpleImageInfo simpleImageInfo = new SimpleImageInfo(new File(imageFilename));
+            System.out.println("Width " + simpleImageInfo.getWidth() + " Height: " + simpleImageInfo.getHeight());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deselect() {
