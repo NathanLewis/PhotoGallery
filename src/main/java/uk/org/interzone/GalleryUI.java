@@ -1,9 +1,12 @@
 package uk.org.interzone;
 
+import uk.co.jaimon.test.SimpleImageInfo;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -14,8 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GalleryUI extends JFrame {
 
-    public static final int BWIDTH = 96;
-    public static final int BHEIGHT = 54;
+    public static int BWIDTH = 96;
+    public static int BHEIGHT = 54;
     public static final int BIGGEST = BWIDTH > BHEIGHT ? BWIDTH : BHEIGHT;
     public static int numRows = 4;
     public static int numCols = 4;
@@ -33,6 +36,14 @@ public class GalleryUI extends JFrame {
         if (files.size() == 0) {
             return;
         }
+        SimpleImageInfo simpleImageInfo = null;
+        try {
+            simpleImageInfo = new SimpleImageInfo(files.get(0));
+            System.out.println("Width " + simpleImageInfo.getWidth() + " Height: " + simpleImageInfo.getHeight());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         for (int j = 0; j < numRows; j++) {
             for (int i = 0; i < numCols; i++) {
                 String filename = files.get(ind).toString();
@@ -41,38 +52,14 @@ public class GalleryUI extends JFrame {
                 button.setBounds(i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2,
                         j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2, BWIDTH, BHEIGHT);
 
-                button.addMouseMotionListener(new MouseAdapter() {
-                    // this works though the images lurch unless you grab them by the top left
-                    public void mouseDragged(MouseEvent E) {
-                        int X = E.getX() + button.getX() - BWIDTH / 2;  // - BWIDTH / 2  so we are dragging from the centre
-                        int Y = E.getY() + button.getY() - BHEIGHT / 2; // - BHEIGHT / 2  so we are dragging from the centre
-//                        System.out.println("X: " + X + "  Y: " + Y);
-                        button.setBounds(X, Y, BWIDTH, BHEIGHT);
-                    }
-                });
-                button.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        // when the shift button is pressed
-                        if((e.getModifiers() & InputEvent.SHIFT_MASK) != 0) {
-                            button.select();
-                            selectedButtons.add(button);
-                        } else {
-                            button.select();
-                            for(NButton b : selectedButtons) {
-                                b.deselect();
-                                selectedButtons.remove(b);
-                            }
-                            selectedButtons.add(button);
-                        }
-                    }
-                });
+                button.addEventHandling();
                 ind++;
             }
         }
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                for(NButton b : selectedButtons) {
+                for (NButton b : selectedButtons) {
                     b.deselect();
                     selectedButtons.remove(b);
                 }
@@ -97,4 +84,5 @@ public class GalleryUI extends JFrame {
             }
         });
     }
+
 }

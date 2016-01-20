@@ -6,8 +6,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -129,12 +128,6 @@ public class NButton extends JButton {
         this.setBorder(selectedBorder);
         this.addKeyListener(keyListener);
         this.bSelected = true;
-        try {
-            SimpleImageInfo simpleImageInfo = new SimpleImageInfo(new File(imageFilename));
-            System.out.println("Width " + simpleImageInfo.getWidth() + " Height: " + simpleImageInfo.getHeight());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void deselect() {
@@ -145,6 +138,34 @@ public class NButton extends JButton {
 
     public boolean isSelected() {
         return bSelected;
+    }
+
+    protected void addEventHandling() {
+        addMouseMotionListener(new MouseAdapter() {
+            // this works though the images lurch unless you grab them by the top left
+            public void mouseDragged(MouseEvent E) {
+                int X = E.getX() + getX() - GalleryUI.BWIDTH / 2;  // - BWIDTH / 2  so we are dragging from the centre
+                int Y = E.getY() + getY() - GalleryUI.BHEIGHT / 2; // - BHEIGHT / 2  so we are dragging from the centre
+//                        System.out.println("X: " + X + "  Y: " + Y);
+                setBounds(X, Y, GalleryUI.BWIDTH, GalleryUI.BHEIGHT);
+            }
+        });
+        addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // when the shift button is pressed
+                if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0) {
+                    select();
+                    selectedButtons.add(NButton.this);
+                } else {
+                    select();
+                    for (NButton b : selectedButtons) {
+                        b.deselect();
+                        selectedButtons.remove(b);
+                    }
+                    selectedButtons.add(NButton.this);
+                }
+            }
+        });
     }
 
     public enum Orientation {
