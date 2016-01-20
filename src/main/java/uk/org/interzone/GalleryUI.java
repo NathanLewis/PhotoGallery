@@ -36,7 +36,7 @@ public class GalleryUI extends JFrame {
         for (int j = 0; j < numRows; j++) {
             for (int i = 0; i < numCols; i++) {
                 String filename = files.get(ind).toString();
-                final NButton button = new NButton("", filename, ind, selectedButtons);
+                final NButton button = new NButton("", filename, ind, selectedButtons, BWIDTH, BHEIGHT);
                 add(button);
                 button.setBounds(i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2,
                         j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2, BWIDTH, BHEIGHT);

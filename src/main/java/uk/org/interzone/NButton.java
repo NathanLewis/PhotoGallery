@@ -13,38 +13,46 @@ import java.util.Set;
 /**
  * Created by nathan on 10/01/16.
  */
-public class NButton  extends JButton {
+public class NButton extends JButton {
     protected final String imageFilename;
     protected final Set<NButton> selectedButtons;
+    private final int diff;
     protected boolean bSelected = false;
     protected int index;
-    protected int X,Y, width, height;
+    protected int X, Y, width, height;
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
+    protected Orientation orientation = Orientation.Landscape;
     protected KeyListener keyListener = new KeyListener() {
         @Override
         public void keyTyped(KeyEvent e) {
             char keyChar = e.getKeyChar();
             System.out.println("typed: " + keyChar);
-            if('r' == keyChar || 'R' == keyChar) {
+            if ('r' == keyChar || 'R' == keyChar) {
                 try {
-                    for(NButton selected: selectedButtons) {
+                    for (NButton selected : selectedButtons) {
                         selected.rotateRight();
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-            }
-            else if('l' == keyChar || 'L' == keyChar) {
+            } else if ('l' == keyChar || 'L' == keyChar) {
                 try {
-                    for(NButton selected: selectedButtons) {
+                    for (NButton selected : selectedButtons) {
                         selected.rotateLeft();
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
+            } else if ('h' == keyChar || 'H' == keyChar) {
+                for (NButton selected : selectedButtons) {
+                    selected.moveLeft();
+                }
+            } else if ('j' == keyChar || 'J' == keyChar) {
+                for (NButton selected : selectedButtons) {
+                    selected.moveRight();
+                }
             }
-
 
         }
 
@@ -59,25 +67,50 @@ public class NButton  extends JButton {
         }
     };
 
+    public NButton(String text, String imageFilename, int ind, Set<NButton> selectedButtons, int width, int height) {
+        super(text, new ImageIcon(imageFilename));
+        this.imageFilename = imageFilename;
+        this.index = ind;
+        this.selectedButtons = selectedButtons;
+        this.width = width;
+        this.height = height;
+        if (width > height) {
+            this.diff = (width - height) / 2;
+        } else {
+            this.diff = (height - width) / 2;
+        }
+    }
+
     void rotateLeft() throws IOException {
-        System.out.println("Rotating " + imageFilename + ", index " + index + " right");
+        System.out.println("Rotating " + imageFilename + ", index " + index + " left");
         BufferedImage rotated = ImageUtils.rotateLeft(imageFilename);
-        this.setBounds(X, Y, height, width);
+        setNewBounds();
         this.setIcon(new ImageIcon(rotated));
+    }
+
+    protected void setNewBounds() {
+        if (Orientation.Landscape == this.orientation) {
+            this.setBounds(X + diff, Y, height, width);
+            this.orientation = Orientation.Portrait;
+        } else {
+            this.setBounds(X - diff, Y, height, width);
+            this.orientation = Orientation.Landscape;
+        }
+    }
+
+    void moveLeft() {
+        this.setBounds(X - diff, Y, width, height);
+    }
+
+    void moveRight() {
+        this.setBounds(X + diff, Y, width, height);
     }
 
     void rotateRight() throws IOException {
         System.out.println("Rotating " + imageFilename + ", index " + index + " right");
         BufferedImage rotated = ImageUtils.rotateRight(imageFilename);
-        this.setBounds(X, Y, height, width);
+        setNewBounds();
         this.setIcon(new ImageIcon(rotated));
-    }
-
-    public NButton(String text, String imageFilename, int ind, Set<NButton> selectedButtons) {
-        super(text, new ImageIcon(imageFilename));
-        this.imageFilename = imageFilename;
-        this.index = ind;
-        this.selectedButtons = selectedButtons;
     }
 
     @Override
@@ -103,5 +136,10 @@ public class NButton  extends JButton {
 
     public boolean isSelected() {
         return bSelected;
+    }
+
+    public enum Orientation {
+        Landscape,
+        Portrait
     }
 }
