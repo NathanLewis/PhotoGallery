@@ -20,7 +20,7 @@ public class NButton extends JButton {
     protected int X, Y, width, height;
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
-    protected Orientation orientation = Orientation.Landscape;
+    protected Orientation orientation;
     protected KeyListener keyListener = new KeyListener() {
         @Override
         public void keyTyped(KeyEvent e) {
@@ -76,6 +76,7 @@ public class NButton extends JButton {
         } else {
             this.diff = (height - width) / 2;
         }
+        this.orientation = image.getOrientation();
         this.setIcon(new ImageIcon(image.toString()));
     }
 
