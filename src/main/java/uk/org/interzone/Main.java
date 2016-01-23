@@ -25,17 +25,17 @@ public class Main
             }
         });
 
-        ArrayList<Image> thumbnails = new ArrayList<>();
+        ArrayList<Image> images = new ArrayList<>();
         if (null != files) {
             for (File picfile : files) {
                 try {
-                    thumbnails.add(new Image(picfile, ImageUtils.res(picfile.getName(), photodir)));
+                    images.add(new Image(picfile, ImageUtils.res(picfile.getName(), photodir)));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
-        GalleryUI galleryUI = new GalleryUI(thumbnails);
+        GalleryUI galleryUI = new GalleryUI(images);
     }
 
 }

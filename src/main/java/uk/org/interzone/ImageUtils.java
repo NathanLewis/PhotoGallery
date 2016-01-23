@@ -37,8 +37,7 @@ public class ImageUtils {
         return outputFile;
     }
 
-    public static BufferedImage rotateRight(String sourceFilename) throws IOException {
-        File imageFile = new File(sourceFilename);
+    public static BufferedImage rotateRight(File imageFile) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(imageFile);
         BufferedImage rotated = Scalr.rotate(bufferedImage, Scalr.Rotation.CW_90);
         rotated.createGraphics().drawImage(rotated, 0, 0, null);
@@ -46,8 +45,7 @@ public class ImageUtils {
         return rotated;
     }
 
-    public static BufferedImage rotateLeft(String sourceFilename) throws IOException {
-        File imageFile = new File(sourceFilename);
+    public static BufferedImage rotateLeft(File imageFile) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(imageFile);
         BufferedImage rotated = Scalr.rotate(bufferedImage, Scalr.Rotation.CW_270);
         rotated.createGraphics().drawImage(rotated, 0, 0, null);

@@ -2,6 +2,7 @@ package uk.org.interzone;
 
 import uk.co.jaimon.test.SimpleImageInfo;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -35,5 +36,15 @@ public class Image {
     @Override
     public String toString() {
         return thumbnail.toString();
+    }
+
+    BufferedImage rotateRight() throws IOException {
+        ImageUtils.rotateRight(original);
+        return ImageUtils.rotateRight(thumbnail);
+    }
+
+    BufferedImage rotateLeft() throws IOException {
+        ImageUtils.rotateLeft(original);
+        return ImageUtils.rotateLeft(thumbnail);
     }
 }

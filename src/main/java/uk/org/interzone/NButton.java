@@ -1,14 +1,10 @@
 package uk.org.interzone;
 
-import uk.co.jaimon.test.SimpleImageInfo;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
@@ -83,14 +79,6 @@ public class NButton extends JButton {
         this.setIcon(new ImageIcon(image.toString()));
     }
 
-    void rotateLeft() throws IOException {
-        String imageFilename = image.toString();
-        System.out.println("Rotating " + imageFilename + ", index " + index + " left");
-        BufferedImage rotated = ImageUtils.rotateLeft(imageFilename);
-        setNewBounds();
-        this.setIcon(new ImageIcon(rotated));
-    }
-
     protected void setNewBounds() {
         if (Orientation.Landscape == this.orientation) {
             this.setBounds(X + diff, Y, height, width);
@@ -109,12 +97,16 @@ public class NButton extends JButton {
         this.setBounds(X + diff, Y, width, height);
     }
 
-    void rotateRight() throws IOException {
-        String imageFilename = image.toString();
-        System.out.println("Rotating " + imageFilename + ", index " + index + " right");
-        BufferedImage rotated = ImageUtils.rotateRight(imageFilename);
+    void rotateLeft() throws IOException {
+        System.out.println("Rotating " + image.toString() + ", index " + index + " left");
         setNewBounds();
-        this.setIcon(new ImageIcon(rotated));
+        this.setIcon(new ImageIcon(image.rotateLeft()));
+    }
+
+    void rotateRight() throws IOException {
+        System.out.println("Rotating " + image.toString() + ", index " + index + " right");
+        setNewBounds();
+        this.setIcon(new ImageIcon(image.rotateRight()));
     }
 
     @Override
