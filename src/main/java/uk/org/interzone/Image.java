@@ -5,6 +5,9 @@ import uk.co.jaimon.test.SimpleImageInfo;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by nathan on 23/01/16.
@@ -14,6 +17,7 @@ public class Image {
     protected File thumbnail;
     protected File original;
     protected int orig_height, orig_width, thumb_height, thumb_width;
+    private static Executor executor = Executors.newSingleThreadExecutor();
 
     public Image(File picfile, String photodir) throws IOException {
         this.original = picfile;
@@ -50,14 +54,32 @@ public class Image {
     BufferedImage rotateRight() throws IOException {
         toggleOrientation();
         BufferedImage bufferedImage = ImageUtils.rotateRight(thumbnail);
-        ImageUtils.rotateRight(original);
+        Runnable r = new Runnable() {
+            public void run() {
+                try {
+                    ImageUtils.rotateRight(original);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        executor.execute(r);
         return bufferedImage;
     }
 
     BufferedImage rotateLeft() throws IOException {
         toggleOrientation();
         BufferedImage bufferedImage = ImageUtils.rotateLeft(thumbnail);
-        ImageUtils.rotateLeft(original);
+        Runnable r = new Runnable() {
+            public void run() {
+                try {
+                    ImageUtils.rotateLeft(original);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        executor.execute(r);
         return bufferedImage;
     }
 
