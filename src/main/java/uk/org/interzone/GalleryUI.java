@@ -5,7 +5,6 @@ import uk.co.jaimon.test.SimpleImageInfo;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +37,7 @@ public class GalleryUI extends JFrame {
         }
         SimpleImageInfo simpleImageInfo = null;
         try {
-            simpleImageInfo = new SimpleImageInfo(files.get(0).getFile());
+            simpleImageInfo = new SimpleImageInfo(files.get(0).getThumbnail());
             System.out.println("Width " + simpleImageInfo.getWidth() + " Height: " + simpleImageInfo.getHeight());
         } catch (IOException e) {
             e.printStackTrace();
