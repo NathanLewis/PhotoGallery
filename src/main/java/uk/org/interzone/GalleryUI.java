@@ -24,7 +24,7 @@ public class GalleryUI extends JFrame {
     public static int numCols = 4;
     final Set<NButton> selectedButtons;
 
-    public GalleryUI(List<File> files) {
+    public GalleryUI(List<Image> files) {
         super("Photo Gallery");
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setSize(620, 620);
@@ -38,7 +38,7 @@ public class GalleryUI extends JFrame {
         }
         SimpleImageInfo simpleImageInfo = null;
         try {
-            simpleImageInfo = new SimpleImageInfo(files.get(0));
+            simpleImageInfo = new SimpleImageInfo(files.get(0).getFile());
             System.out.println("Width " + simpleImageInfo.getWidth() + " Height: " + simpleImageInfo.getHeight());
         } catch (IOException e) {
             e.printStackTrace();

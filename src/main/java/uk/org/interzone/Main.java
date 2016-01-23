@@ -25,11 +25,11 @@ public class Main
             }
         });
 
-        ArrayList<File> thumbnails = new ArrayList<File>();
+        ArrayList<Image> thumbnails = new ArrayList<>();
         if (null != files) {
             for (File picfile : files) {
                 try {
-                    thumbnails.add(ImageUtils.res(picfile.getName(), photodir));
+                    thumbnails.add(new Image(ImageUtils.res(picfile.getName(), photodir)));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

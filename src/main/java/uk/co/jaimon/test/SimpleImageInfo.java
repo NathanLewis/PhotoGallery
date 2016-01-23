@@ -45,6 +45,10 @@ public class SimpleImageInfo {
 
     }
 
+    public SimpleImageInfo(String filename) throws IOException {
+        this(new File(filename));
+    }
+
     public SimpleImageInfo(File file) throws IOException {
         InputStream is = new FileInputStream(file);
         try {
