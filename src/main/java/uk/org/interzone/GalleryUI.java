@@ -23,7 +23,7 @@ public class GalleryUI extends JFrame {
     public static int numCols = 4;
     final Set<NButton> selectedButtons;
 
-    public GalleryUI(List<Image> files) {
+    public GalleryUI(List<Image> images) {
         super("Photo Gallery");
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setSize(620, 620);
@@ -32,17 +32,22 @@ public class GalleryUI extends JFrame {
         this.getContentPane().setBackground(Color.BLACK);
         int ind = 0;
         selectedButtons = Collections.newSetFromMap(new ConcurrentHashMap<NButton, Boolean>());
-        if (files.size() == 0) {
+        if (images.size() == 0) {
             return;
         }
 
         for (int j = 0; j < numRows; j++) {
             for (int i = 0; i < numCols; i++) {
-                final NButton button = new NButton(files.get(ind), ind, selectedButtons, BWIDTH, BHEIGHT);
+                Image image = images.get(ind);
+                final NButton button = new NButton(image, ind, selectedButtons, BWIDTH, BHEIGHT);
                 add(button);
-                button.setBounds(i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2,
-                        j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2, BWIDTH, BHEIGHT);
-
+                int X = i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2;
+                int Y = j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2;
+                if(Orientation.Landscape == image.getOrientation()) {
+                    button.setBounds(X, Y, BWIDTH, BHEIGHT);
+                } else {
+                    button.setBounds(X + (BWIDTH - BHEIGHT)/2, Y, BHEIGHT, BWIDTH);
+                }
                 button.addEventHandling();
                 ind++;
             }

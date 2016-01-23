@@ -14,7 +14,7 @@ import static org.imgscalr.Scalr.resize;
  */
 public class ImageUtils {
 
-    public static File res(String sourceFilename, String dirname) throws IOException {
+    public static File res(String sourceFilename, String dirname, int targetWidth, int targetHeight) throws IOException {
 
         File sourceImageFile = new File(dirname + "/" + sourceFilename);
         String thumbdir = dirname + "/thumbnails/";
@@ -29,7 +29,7 @@ public class ImageUtils {
         }
         BufferedImage img = ImageIO.read(sourceImageFile);
 
-        BufferedImage thumbnail = resize(img, GalleryUI.BWIDTH, GalleryUI.BHEIGHT);
+        BufferedImage thumbnail = resize(img, targetWidth, targetHeight);
 
         thumbnail.createGraphics().drawImage(thumbnail, 0, 0, null);
         ImageIO.write(thumbnail, "jpg", outputFile);
@@ -52,4 +52,5 @@ public class ImageUtils {
         ImageIO.write(rotated, "jpg", imageFile);
         return rotated;
     }
+
 }

@@ -162,8 +162,4 @@ public class NButton extends JButton {
         });
     }
 
-    public enum Orientation {
-        Landscape,
-        Portrait
-    }
 }
