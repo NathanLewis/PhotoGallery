@@ -29,7 +29,7 @@ public class Main
         if (null != files) {
             for (File picfile : files) {
                 try {
-                    thumbnails.add(new Image(ImageUtils.res(picfile.getName(), photodir)));
+                    thumbnails.add(new Image(picfile, ImageUtils.res(picfile.getName(), photodir)));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

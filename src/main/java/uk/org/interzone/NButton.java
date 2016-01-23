@@ -16,9 +16,9 @@ import java.util.Set;
  * Created by nathan on 10/01/16.
  */
 public class NButton extends JButton {
-    protected final String imageFilename;
     protected final Set<NButton> selectedButtons;
     private final int diff;
+    private final Image image;
     protected boolean bSelected = false;
     protected int index;
     protected int X, Y, width, height;
@@ -69,9 +69,8 @@ public class NButton extends JButton {
         }
     };
 
-    public NButton(String text, String imageFilename, int ind, Set<NButton> selectedButtons, int width, int height) {
-        super(text, new ImageIcon(imageFilename));
-        this.imageFilename = imageFilename;
+    public NButton(Image image, int ind, Set<NButton> selectedButtons, int width, int height) {
+        this.image = image;
         this.index = ind;
         this.selectedButtons = selectedButtons;
         this.width = width;
@@ -81,9 +80,11 @@ public class NButton extends JButton {
         } else {
             this.diff = (height - width) / 2;
         }
+        this.setIcon(new ImageIcon(image.toString()));
     }
 
     void rotateLeft() throws IOException {
+        String imageFilename = image.toString();
         System.out.println("Rotating " + imageFilename + ", index " + index + " left");
         BufferedImage rotated = ImageUtils.rotateLeft(imageFilename);
         setNewBounds();
@@ -109,6 +110,7 @@ public class NButton extends JButton {
     }
 
     void rotateRight() throws IOException {
+        String imageFilename = image.toString();
         System.out.println("Rotating " + imageFilename + ", index " + index + " right");
         BufferedImage rotated = ImageUtils.rotateRight(imageFilename);
         setNewBounds();

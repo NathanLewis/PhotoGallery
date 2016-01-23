@@ -35,18 +35,10 @@ public class GalleryUI extends JFrame {
         if (files.size() == 0) {
             return;
         }
-        SimpleImageInfo simpleImageInfo = null;
-        try {
-            simpleImageInfo = new SimpleImageInfo(files.get(0).getThumbnail());
-            System.out.println("Width " + simpleImageInfo.getWidth() + " Height: " + simpleImageInfo.getHeight());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         for (int j = 0; j < numRows; j++) {
             for (int i = 0; i < numCols; i++) {
-                String filename = files.get(ind).toString();
-                final NButton button = new NButton("", filename, ind, selectedButtons, BWIDTH, BHEIGHT);
+                final NButton button = new NButton(files.get(ind), ind, selectedButtons, BWIDTH, BHEIGHT);
                 add(button);
                 button.setBounds(i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2,
                         j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2, BWIDTH, BHEIGHT);
