@@ -137,12 +137,44 @@ public class NButton extends JButton {
 
     protected void addEventHandling() {
         addMouseMotionListener(new MouseAdapter() {
-            // this works though the images lurch unless you grab them by the top left
+            @Override
             public void mouseDragged(MouseEvent E) {
                 int X = E.getX() + getX() - GalleryUI.BWIDTH / 2;  // - BWIDTH / 2  so we are dragging from the centre
                 int Y = E.getY() + getY() - GalleryUI.BHEIGHT / 2; // - BHEIGHT / 2  so we are dragging from the centre
-//                        System.out.println("X: " + X + "  Y: " + Y);
-                setBounds(X, Y, GalleryUI.BWIDTH, GalleryUI.BHEIGHT);
+
+                if(Orientation.Landscape == orientation) {
+                    setBounds(X, Y, GalleryUI.BWIDTH, GalleryUI.BHEIGHT);
+                } else {
+                    setBounds(X, Y, GalleryUI.BHEIGHT, GalleryUI.BWIDTH);
+                }
+            }
+        });
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("mouseClicked");
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+//                System.out.println("mousePressed");
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                Rectangle rectangle = getBounds();
+                System.out.println("Mouse released x: " + getX() + " y: " + getY() + " " + rectangle);
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+//                System.out.println("mouseEntered");
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+//                System.out.println("mouseExited");
             }
         });
         addActionListener(new ActionListener() {
