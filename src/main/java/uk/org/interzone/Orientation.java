@@ -5,5 +5,5 @@ package uk.org.interzone;
  */
 public enum Orientation {
     Landscape,
-    orientation, Portrait
+    Portrait
 }
