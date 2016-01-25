@@ -21,6 +21,8 @@ public class NButton extends JButton {
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
     protected Orientation orientation;
+    protected Rectangle rectangle;
+    protected int x_centre;
     protected KeyListener keyListener = new KeyListener() {
         @Override
         public void keyTyped(KeyEvent e) {
@@ -119,6 +121,12 @@ public class NButton extends JButton {
         this.height = height;
     }
 
+    public void setInitialBounds(int x, int y, int width, int height) {
+        this.rectangle = new Rectangle(x, y, width, height);
+        setBounds(rectangle);
+        this.x_centre = x + this.diff;
+    }
+
     public void select() {
         this.setBorder(selectedBorder);
         this.addKeyListener(keyListener);
@@ -133,6 +141,10 @@ public class NButton extends JButton {
 
     public boolean isSelected() {
         return bSelected;
+    }
+
+    public int getXcentre() {
+        return x_centre;
     }
 
     protected void addEventHandling() {
@@ -162,9 +174,9 @@ public class NButton extends JButton {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                Rectangle rectangle = getBounds();
-                System.out.println("Mouse released x: " + getX() + " y: " + getY() + " " + rectangle);
-
+                System.out.println("Mouse released x: " + getX() + " y: " + getY() + " " + getBounds());
+                System.out.println(rectangle);
+                setBounds(rectangle);
             }
 
             @Override

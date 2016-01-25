@@ -44,9 +44,10 @@ public class GalleryUI extends JFrame {
                 int X = i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2;
                 int Y = j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2;
                 if(Orientation.Landscape == image.getOrientation()) {
-                    button.setBounds(X, Y, BWIDTH, BHEIGHT);
+//                    button.setBounds(new Rectangle(X, Y, BWIDTH, BHEIGHT));
+                    button.setInitialBounds(X, Y, BWIDTH, BHEIGHT);
                 } else {
-                    button.setBounds(X + (BWIDTH - BHEIGHT)/2, Y, BHEIGHT, BWIDTH);
+                    button.setInitialBounds(X + (BWIDTH - BHEIGHT)/2, Y, BHEIGHT, BWIDTH);
                 }
                 button.addEventHandling();
                 ind++;
