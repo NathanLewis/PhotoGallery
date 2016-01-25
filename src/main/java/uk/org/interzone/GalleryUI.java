@@ -52,31 +52,16 @@ public class GalleryUI extends JFrame {
                 ind++;
             }
         }
-        this.addMouseListener(new MouseListener() {
+        this.addMouseListener(new MouseAdapter() {
+            // mouseClick on the canvas deselects all
+            // selected thumbnails
             @Override
             public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
                 for (NButton b : selectedButtons) {
                     b.deselect();
                     selectedButtons.remove(b);
                 }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
             }
         });
     }
