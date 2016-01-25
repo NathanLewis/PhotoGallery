@@ -22,7 +22,8 @@ public class NButton extends JButton {
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
     protected Orientation orientation;
     protected Rectangle rectangle;
-    protected int x_centre;
+    protected int x_centre, prevX, prevY;
+    ;
     protected KeyListener keyListener = new KeyListener() {
         @Override
         public void keyTyped(KeyEvent e) {
@@ -159,6 +160,16 @@ public class NButton extends JButton {
                 } else {
                     setBounds(X, Y, GalleryUI.BHEIGHT, GalleryUI.BWIDTH);
                 }
+                if( X < prevX ) {
+                    System.out.println("Moving Left");
+                } else if( X > prevX ) {
+                    System.out.println("Moving Right");
+                }
+                if( Y < prevY ) {
+                    System.out.println("Moving Up");
+                }
+                prevX = X;
+                prevY = Y;
             }
         });
         addMouseListener(new MouseListener() {
