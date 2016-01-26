@@ -31,7 +31,7 @@ public class GalleryUI extends JFrame {
         super.setLayout(null);
         this.getContentPane().setBackground(Color.BLACK);
         int ind = 0;
-        selectedButtons = Collections.newSetFromMap(new ConcurrentHashMap<NButton, Boolean>());
+        selectedButtons = Collections.newSetFromMap(new ConcurrentHashMap<NButton, Boolean>()); // makes a concurrent set
         if (images.size() == 0) {
             return;
         }
@@ -39,7 +39,7 @@ public class GalleryUI extends JFrame {
         for (int j = 0; j < numRows; j++) {
             for (int i = 0; i < numCols; i++) {
                 Image image = images.get(ind);
-                final NButton button = new NButton(image, ind, selectedButtons, BWIDTH, BHEIGHT);
+                final NButton button = new NButton(image, i, selectedButtons, BWIDTH, BHEIGHT);
                 add(button);
                 int X = i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2;
                 int Y = j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2;

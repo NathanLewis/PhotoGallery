@@ -16,7 +16,7 @@ public class NButton extends JButton {
     private final int diff;
     private final Image image;
     protected boolean bSelected = false;
-    protected int index;
+    protected int row_pos;
     protected int X, Y, width, height;
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
@@ -68,9 +68,9 @@ public class NButton extends JButton {
         }
     };
 
-    public NButton(Image image, int ind, Set<NButton> selectedButtons, int width, int height) {
+    public NButton(Image image, int row_pos, Set<NButton> selectedButtons, int width, int height) {
         this.image = image;
-        this.index = ind;
+        this.row_pos = row_pos;
         this.selectedButtons = selectedButtons;
         this.width = width;
         this.height = height;
@@ -102,13 +102,13 @@ public class NButton extends JButton {
     }
 
     void rotateLeft() throws IOException {
-        System.out.println("Rotating " + image.toString() + ", index " + index + " left");
+        System.out.println("Rotating " + image.toString() + ", row_pos " + row_pos + " left");
         setNewBounds();
         this.setIcon(new ImageIcon(image.rotateLeft()));
     }
 
     void rotateRight() throws IOException {
-        System.out.println("Rotating " + image.toString() + ", index " + index + " right");
+        System.out.println("Rotating " + image.toString() + ", row_pos " + row_pos + " right");
         setNewBounds();
         this.setIcon(new ImageIcon(image.rotateRight()));
     }
@@ -162,6 +162,11 @@ public class NButton extends JButton {
                 }
                 if( X < prevX ) {
                     System.out.println("Moving Left");
+                    // look to left neighbor
+                    if( row_pos > 0 ) {
+                        int left = row_pos - 1;
+
+                    }
                 } else if( X > prevX ) {
                     System.out.println("Moving Right");
                 }
