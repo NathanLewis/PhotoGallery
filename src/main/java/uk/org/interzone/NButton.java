@@ -15,8 +15,9 @@ public class NButton extends JButton {
     protected final Set<NButton> selectedButtons;
     private final int diff;
     private final Image image;
+    private final NButton[][] grid;
     protected boolean bSelected = false;
-    protected int row_pos;
+    protected int row, col;
     protected int X, Y, width, height;
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
@@ -68,10 +69,12 @@ public class NButton extends JButton {
         }
     };
 
-    public NButton(Image image, int row_pos, Set<NButton> selectedButtons, int width, int height) {
+    public NButton(Image image, int row, int col, Set<NButton> selectedButtons, NButton[][] grid, int width, int height) {
         this.image = image;
-        this.row_pos = row_pos;
+        this.row = row;
+        this.col = col;
         this.selectedButtons = selectedButtons;
+        this.grid = grid;
         this.width = width;
         this.height = height;
         if (width > height) {
@@ -102,13 +105,13 @@ public class NButton extends JButton {
     }
 
     void rotateLeft() throws IOException {
-        System.out.println("Rotating " + image.toString() + ", row_pos " + row_pos + " left");
+        System.out.println("Rotating " + image.toString() + ", col " + col + " left");
         setNewBounds();
         this.setIcon(new ImageIcon(image.rotateLeft()));
     }
 
     void rotateRight() throws IOException {
-        System.out.println("Rotating " + image.toString() + ", row_pos " + row_pos + " right");
+        System.out.println("Rotating " + image.toString() + ", col " + col + " right");
         setNewBounds();
         this.setIcon(new ImageIcon(image.rotateRight()));
     }
@@ -163,8 +166,8 @@ public class NButton extends JButton {
                 if( X < prevX ) {
                     System.out.println("Moving Left");
                     // look to left neighbor
-                    if( row_pos > 0 ) {
-                        int left = row_pos - 1;
+                    if( col > 0 ) {
+                        int left = col - 1;
 
                     }
                 } else if( X > prevX ) {

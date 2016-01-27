@@ -1,11 +1,8 @@
 package uk.org.interzone;
 
-import uk.co.jaimon.test.SimpleImageInfo;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -35,14 +32,15 @@ public class GalleryUI extends JFrame {
         if (images.size() == 0) {
             return;
         }
+        NButton grid[][] = new NButton[numRows][numCols];
 
-        for (int j = 0; j < numRows; j++) {
-            for (int i = 0; i < numCols; i++) {
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
                 Image image = images.get(ind);
-                final NButton button = new NButton(image, i, selectedButtons, BWIDTH, BHEIGHT);
+                final NButton button = new NButton(image,  row, col, selectedButtons, grid, BWIDTH, BHEIGHT);
                 add(button);
-                int X = i * BIGGEST + i * BIGGEST / 2 + BIGGEST / 2;
-                int Y = j * BIGGEST + j * BIGGEST / 2 + BIGGEST / 2;
+                int X = col * BIGGEST + col * BIGGEST / 2 + BIGGEST / 2;
+                int Y = row * BIGGEST + row * BIGGEST / 2 + BIGGEST / 2;
                 if(Orientation.Landscape == image.getOrientation()) {
 //                    button.setBounds(new Rectangle(X, Y, BWIDTH, BHEIGHT));
                     button.setInitialBounds(X, Y, BWIDTH, BHEIGHT);
@@ -50,6 +48,7 @@ public class GalleryUI extends JFrame {
                     button.setInitialBounds(X + (BWIDTH - BHEIGHT)/2, Y, BHEIGHT, BWIDTH);
                 }
                 button.addEventHandling();
+                grid[row][col] = button;
                 ind++;
             }
         }
