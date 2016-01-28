@@ -86,7 +86,7 @@ public class NButton extends JButton {
         this.setIcon(new ImageIcon(image.toString()));
     }
 
-    protected void setNewBounds() {
+    protected void setNewOrientation() {
         if (Orientation.Landscape == this.orientation) {
             this.setBounds(X + diff, Y, height, width);
             this.orientation = Orientation.Portrait;
@@ -106,13 +106,13 @@ public class NButton extends JButton {
 
     void rotateLeft() throws IOException {
         System.out.println("Rotating " + image.toString() + ", col " + col + " left");
-        setNewBounds();
+        setNewOrientation();
         this.setIcon(new ImageIcon(image.rotateLeft()));
     }
 
     void rotateRight() throws IOException {
         System.out.println("Rotating " + image.toString() + ", col " + col + " right");
-        setNewBounds();
+        setNewOrientation();
         this.setIcon(new ImageIcon(image.rotateRight()));
     }
 
@@ -157,19 +157,33 @@ public class NButton extends JButton {
             public void mouseDragged(MouseEvent E) {
                 int X = E.getX() + getX() - GalleryUI.BWIDTH / 2;  // - BWIDTH / 2  so we are dragging from the centre
                 int Y = E.getY() + getY() - GalleryUI.BHEIGHT / 2; // - BHEIGHT / 2  so we are dragging from the centre
-
                 if(Orientation.Landscape == orientation) {
                     setBounds(X, Y, GalleryUI.BWIDTH, GalleryUI.BHEIGHT);
                 } else {
                     setBounds(X, Y, GalleryUI.BHEIGHT, GalleryUI.BWIDTH);
                 }
+
+
                 if( X < prevX ) {
                     System.out.println("Moving Left");
-                    // look to left neighbor
+                    // look to left neighbor  but what if we are the left most??
                     if( col > 0 ) {
                         int left = col - 1;
+                        // Watch out for Pictures in Portrait. Currently not handling this correctly
+                        // don't blindly trade rectanges if one is Landscape and the other is potrait.
+                        if( X < grid[row][left].getXcentre() ) {
+                            Rectangle temp = rectangle;
+                            NButton.this.rectangle = grid[row][left].rectangle;
+                            int centerx = NButton.this.x_centre;
+                            NButton.this.x_centre = grid[row][left].getXcentre();
+                            grid[row][left].rePosition(temp,row,col,centerx);
+                            grid[row][col] = grid[row][left];
+                            grid[row][left] = NButton.this;
+                            NButton.this.col = left;
+                        }
 
                     }
+
                 } else if( X > prevX ) {
                     System.out.println("Moving Right");
                 }
@@ -226,4 +240,15 @@ public class NButton extends JButton {
         });
     }
 
+    protected void rePosition(Rectangle rect, int row, int col, int x_centre) {
+        this.rectangle = rect;
+        setBounds(rect);
+        this.row = row;
+        this.col = col;
+        this.x_centre = x_centre;
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
 }
