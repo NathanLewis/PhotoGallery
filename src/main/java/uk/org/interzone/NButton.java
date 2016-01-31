@@ -6,6 +6,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -22,9 +23,10 @@ public class NButton extends JButton {
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
     protected Orientation orientation;
-    protected Rectangle rectangle;
     protected int x_centre, prevX, prevY;
-    ;
+    protected Rectangle rectangle;
+    protected Point point;
+
     protected KeyListener keyListener = new KeyListener() {
         @Override
         public void keyTyped(KeyEvent e) {
@@ -91,17 +93,21 @@ public class NButton extends JButton {
             this.setBounds(X + diff, Y, height, width);
             this.orientation = Orientation.Portrait;
         } else {
-            this.setBounds(X - diff, Y, height, width);
+            this.setBounds(X - diff, Y, height, width); // we want this
             this.orientation = Orientation.Landscape;
         }
     }
 
     void moveLeft() {
-        this.setBounds(X - diff, Y, width, height);
+        this.moveTo(X - diff, Y);
     }
 
     void moveRight() {
-        this.setBounds(X + diff, Y, width, height);
+        this.moveTo(X + diff, Y);
+    }
+
+    void moveTo(int x, int y) {
+        super.setBounds(x, y, this.width, this.height);
     }
 
     void rotateLeft() throws IOException {
@@ -126,8 +132,9 @@ public class NButton extends JButton {
     }
 
     public void setInitialBounds(int x, int y, int width, int height) {
-        this.rectangle = new Rectangle(x, y, width, height);
-        setBounds(rectangle);
+        setBounds(x, y, width, height);
+        this.point = new Point(x, y);
+//        this.rectangle = new Rectangle(x, y, width, height);
         this.x_centre = x + this.diff;
     }
 
@@ -157,12 +164,7 @@ public class NButton extends JButton {
             public void mouseDragged(MouseEvent E) {
                 int X = E.getX() + getX() - GalleryUI.BWIDTH / 2;  // - BWIDTH / 2  so we are dragging from the centre
                 int Y = E.getY() + getY() - GalleryUI.BHEIGHT / 2; // - BHEIGHT / 2  so we are dragging from the centre
-                if(Orientation.Landscape == orientation) {
-                    setBounds(X, Y, GalleryUI.BWIDTH, GalleryUI.BHEIGHT);
-                } else {
-                    setBounds(X, Y, GalleryUI.BHEIGHT, GalleryUI.BWIDTH);
-                }
-
+                moveTo(X, Y);
 
                 if( X < prevX ) {
                     System.out.println("Moving Left");
@@ -172,14 +174,13 @@ public class NButton extends JButton {
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         // don't blindly trade rectanges if one is Landscape and the other is potrait.
                         if( X < grid[row][left].getXcentre() ) {
-                            Rectangle temp = rectangle;
-                            NButton.this.rectangle = grid[row][left].rectangle;
-                            int centerx = NButton.this.x_centre;
-                            NButton.this.x_centre = grid[row][left].getXcentre();
-                            grid[row][left].rePosition(temp,row,col,centerx);
+                            Point temp = grid[row][left].point;
+//                            NButton.this.x_centre = grid[row][left].getXcentre();
+                            grid[row][left].rePosition( NButton.this.point, row, col, NButton.this.x_centre);
+                            NButton.this.rePosition(temp, row, left, grid[row][left].getXcentre());
                             grid[row][col] = grid[row][left];
                             grid[row][left] = NButton.this;
-                            NButton.this.col = left;
+//                            NButton.this.col = left;
                         }
 
                     }
@@ -208,8 +209,8 @@ public class NButton extends JButton {
             @Override
             public void mouseReleased(MouseEvent e) {
                 System.out.println("Mouse released x: " + getX() + " y: " + getY() + " " + getBounds());
-                System.out.println(rectangle);
-                setBounds(rectangle);
+                NButton that = NButton.this;
+                setBounds(that.point.x, that.point.y, that.width, that.height);
             }
 
             @Override
@@ -240,15 +241,12 @@ public class NButton extends JButton {
         });
     }
 
-    protected void rePosition(Rectangle rect, int row, int col, int x_centre) {
-        this.rectangle = rect;
-        setBounds(rect);
+    protected void rePosition(Point point, int row, int col, int x_centre) {
+        setBounds(point.x, point.y, width, height);
+        this.point = point;
         this.row = row;
         this.col = col;
         this.x_centre = x_centre;
     }
 
-    public Rectangle getRectangle() {
-        return rectangle;
-    }
 }
