@@ -56,8 +56,9 @@ public class NButton extends JButton {
                 for (NButton selected : selectedButtons) {
                     selected.moveRight();
                 }
+            } else if ('i' == keyChar || 'I' == keyChar) {
+                System.out.println("Xcentre: " + x_centre + "  Column: " + col);
             }
-
         }
 
         @Override
@@ -167,17 +168,20 @@ public class NButton extends JButton {
                 moveTo(X, Y);
 
                 if( X < prevX ) {
-                    System.out.println("Moving Left");
+                    System.out.println("Moving Left  X: " + X + " prevX: " + prevX);
                     // look to left neighbor  but what if we are the left most??
                     if( col > 0 ) {
                         int left = col - 1;
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         // don't blindly trade rectanges if one is Landscape and the other is potrait.
-                        if( X < grid[row][left].getXcentre() ) {
-                            Point temp = grid[row][left].point;
+                        int leftXcentre = grid[row][left].getXcentre();
+                        System.out.println("leftXcentre: " + leftXcentre);
+                        if( X < leftXcentre) {
+                            System.out.println("X: " + X + " leftXcentre: " + leftXcentre);
+                            Point leftPoint = grid[row][left].point;
 //                            NButton.this.x_centre = grid[row][left].getXcentre();
-                            grid[row][left].rePosition( NButton.this.point, row, col, NButton.this.x_centre);
-                            NButton.this.rePosition(temp, row, left, grid[row][left].getXcentre());
+                            grid[row][left].rePosition( NButton.this.point, row, col, NButton.this.getXcentre());
+                            NButton.this.rePosition(leftPoint, row, left, leftXcentre);
                             grid[row][col] = grid[row][left];
                             grid[row][left] = NButton.this;
 //                            NButton.this.col = left;
