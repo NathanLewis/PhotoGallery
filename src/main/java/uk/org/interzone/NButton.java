@@ -196,6 +196,25 @@ public class NButton extends JButton {
 
                 } else if( X > prevX ) {
 //                    System.out.println("Moving Right");
+                    if( col < 3 ) {
+                        int right = col + 1;
+                        // Watch out for Pictures in Portrait. Currently not handling this correctly
+                        // don't blindly trade rectanges if one is Landscape and the other is potrait.
+                        int rightXcentre = grid[row][right].getXcentre();
+//                        System.out.println("rightXcentre: " + rightXcentre);
+                        if( X > rightXcentre) {
+                            System.out.println("Current X: " + X + " rightXcentre: " + rightXcentre);
+                            System.out.println("Current col: " + col + " right: " + right);
+                            Point rightPoint = grid[row][right].point;
+//                            NButton.this.x_centre = grid[row][right].getXcentre();
+                            grid[row][right].rePosition( NButton.this.point, row, col, NButton.this.getXcentre() );
+                            grid[row][col] = grid[row][right];
+                            grid[row][right] = NButton.this;
+                            NButton.this.rePosition(rightPoint, row, right, rightXcentre);
+//                            NButton.this.col = right;
+                        }
+
+                    }
                 }
                 if( Y < prevY ) {
 //                    System.out.println("Moving Up");
