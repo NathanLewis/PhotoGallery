@@ -31,7 +31,7 @@ public class NButton extends JButton {
         @Override
         public void keyTyped(KeyEvent e) {
             char keyChar = e.getKeyChar();
-            System.out.println("typed: " + keyChar);
+//            System.out.println("typed: " + keyChar);
             if ('r' == keyChar || 'R' == keyChar) {
                 try {
                     for (NButton selected : selectedButtons) {
@@ -57,7 +57,11 @@ public class NButton extends JButton {
                     selected.moveRight();
                 }
             } else if ('i' == keyChar || 'I' == keyChar) {
-                System.out.println("Xcentre: " + x_centre + "  Column: " + col);
+                int left = col;
+                if(col > 0) {
+                    left = col - 1;
+                }
+                System.out.println("Xcentre: " + x_centre + "  Column: " + col + " leftXcentre: " + grid[row][left].getXcentre());
             }
         }
 
@@ -168,32 +172,33 @@ public class NButton extends JButton {
                 moveTo(X, Y);
 
                 if( X < prevX ) {
-                    System.out.println("Moving Left  X: " + X + " prevX: " + prevX);
+//                    System.out.println("Moving Left  X: " + X + " prevX: " + prevX);
                     // look to left neighbor  but what if we are the left most??
                     if( col > 0 ) {
                         int left = col - 1;
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         // don't blindly trade rectanges if one is Landscape and the other is potrait.
                         int leftXcentre = grid[row][left].getXcentre();
-                        System.out.println("leftXcentre: " + leftXcentre);
+//                        System.out.println("leftXcentre: " + leftXcentre);
                         if( X < leftXcentre) {
-                            System.out.println("X: " + X + " leftXcentre: " + leftXcentre);
+                            System.out.println("Current X: " + X + " leftXcentre: " + leftXcentre);
+                            System.out.println("Current col: " + col + " left: " + left);
                             Point leftPoint = grid[row][left].point;
 //                            NButton.this.x_centre = grid[row][left].getXcentre();
-                            grid[row][left].rePosition( NButton.this.point, row, col, NButton.this.getXcentre());
-                            NButton.this.rePosition(leftPoint, row, left, leftXcentre);
+                            grid[row][left].rePosition( NButton.this.point, row, col, NButton.this.getXcentre() );
                             grid[row][col] = grid[row][left];
                             grid[row][left] = NButton.this;
+                            NButton.this.rePosition(leftPoint, row, left, leftXcentre);
 //                            NButton.this.col = left;
                         }
 
                     }
 
                 } else if( X > prevX ) {
-                    System.out.println("Moving Right");
+//                    System.out.println("Moving Right");
                 }
                 if( Y < prevY ) {
-                    System.out.println("Moving Up");
+//                    System.out.println("Moving Up");
                 }
                 prevX = X;
                 prevY = Y;
@@ -202,7 +207,7 @@ public class NButton extends JButton {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("mouseClicked");
+//                System.out.println("mouseClicked");
             }
 
             @Override
