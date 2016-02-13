@@ -23,7 +23,7 @@ public class NButton extends JButton {
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
     protected Orientation orientation;
-    protected int x_centre, prevX, prevY;
+    protected int x_centre, y_centre, prevX, prevY;
     protected Rectangle rectangle;
     protected Point point;
 
@@ -141,6 +141,7 @@ public class NButton extends JButton {
         this.point = new Point(x, y);
 //        this.rectangle = new Rectangle(x, y, width, height);
         this.x_centre = x + this.diff;
+        this.y_centre = y;
     }
 
     public void select() {
@@ -161,6 +162,10 @@ public class NButton extends JButton {
 
     public int getXcentre() {
         return x_centre;
+    }
+
+    public int getYcentre() {
+        return y_centre;
     }
 
     protected void addEventHandling() {
@@ -191,7 +196,6 @@ public class NButton extends JButton {
                             NButton.this.rePosition(leftPoint, row, left, leftXcentre);
 //                            NButton.this.col = left;
                         }
-
                     }
 
                 } else if( X > prevX ) {
@@ -216,8 +220,41 @@ public class NButton extends JButton {
 
                     }
                 }
-                if( Y < prevY ) {
-//                    System.out.println("Moving Up");
+                else if( Y < prevY ) {
+                    System.out.println("Moving Up");
+                    if( row > 0 ) {
+                        int above = row - 1;
+                        // Watch out for Pictures in Portrait. Currently not handling this correctly
+                        int aboveYcentre = grid[above][col].getYcentre();
+                        if( Y > aboveYcentre) {
+                            System.out.println("Current Y: " + Y + " aboveYcentre: " + aboveYcentre);
+                            System.out.println("Current col: " + row + " above: " + above);
+                            Point abovePoint = grid[above][col].point;
+//                            NButton.this.Y_centre = grid[row][above].getYcentre();
+                            grid[above][col].rePositionY( NButton.this.point, row, col, NButton.this.getYcentre() );
+                            grid[row][col] = grid[above][col];
+                            grid[above][col] = NButton.this;
+                            NButton.this.rePositionY(abovePoint, above, col, aboveYcentre);
+                        }
+                    }
+                } else if( Y > prevY ) {
+                    System.out.println("Moving Down");
+                    if( row < 3 ) {
+                        int below = row + 1;
+                        // Watch out for Pictures in Portrait. Currently not handling this correctly
+                        int belowYcentre = grid[below][col].getYcentre();
+//                        System.out.println("belowYcentre: " + belowYcentre);
+                        if( Y > belowYcentre) {
+                            System.out.println("Current Y: " + Y + " belowYcentre: " + belowYcentre);
+                            System.out.println("Current col: " + row + " below: " + below);
+                            Point belowPoint = grid[below][col].point;
+//                            NButton.this.Y_centre = grid[row][below].getYcentre();
+                            grid[below][col].rePositionY( NButton.this.point, row, col, NButton.this.getYcentre() );
+                            grid[row][col] = grid[below][col];
+                            grid[below][col] = NButton.this;
+                            NButton.this.rePositionY(belowPoint, below, col, belowYcentre);
+                        }
+                    }
                 }
                 prevX = X;
                 prevY = Y;
@@ -277,4 +314,11 @@ public class NButton extends JButton {
         this.x_centre = x_centre;
     }
 
+    protected void rePositionY(Point point, int row, int col, int y_centre) {
+        setBounds(point.x, point.y, width, height);
+        this.point = point;
+        this.row = row;
+        this.col = col;
+        this.y_centre = y_centre;
+    }
 }
