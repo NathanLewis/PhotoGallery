@@ -176,7 +176,7 @@ public class NButton extends JButton {
                 int Y = E.getY() + getY() - GalleryUI.BHEIGHT / 2; // - BHEIGHT / 2  so we are dragging from the centre
                 moveTo(X, Y);
 
-                if( X < prevX /* + GalleryUI.BWIDTH/2 */ ) {
+                if( X < prevX ) {
 //                    System.out.println("Moving Left  X: " + X + " prevX: " + prevX);
                     // look to left neighbor  but what if we are the left most??
                     if( col > 0 ) {
@@ -188,10 +188,10 @@ public class NButton extends JButton {
                             System.out.println("Current X: " + X + " leftXcentre: " + leftXcentre);
                             System.out.println("Current col: " + col + " left: " + left);
                             Point leftPoint = grid[row][left].point;
-                            grid[row][left].rePosition( NButton.this.point, row, col, NButton.this.getXcentre() );
                             grid[row][col] = grid[row][left];
-                            grid[row][left] = NButton.this;
+                            grid[row][left].rePosition( NButton.this.point, row, col, NButton.this.getXcentre() );
                             NButton.this.rePosition(leftPoint, row, left, leftXcentre);
+                            grid[row][left] = NButton.this;
                         }
                     }
 
@@ -206,10 +206,10 @@ public class NButton extends JButton {
                             System.out.println("Current X: " + X + " rightXcentre: " + rightXcentre);
                             System.out.println("Current col: " + col + " right: " + right);
                             Point rightPoint = grid[row][right].point;
-                            grid[row][right].rePosition( NButton.this.point, row, col, NButton.this.getXcentre() );
                             grid[row][col] = grid[row][right];
-                            grid[row][right] = NButton.this;
+                            grid[row][right].rePosition( NButton.this.point, row, col, NButton.this.getXcentre() );
                             NButton.this.rePosition(rightPoint, row, right, rightXcentre);
+                            grid[row][right] = NButton.this;
                         }
 
                     }
@@ -224,10 +224,10 @@ public class NButton extends JButton {
                             System.out.println("Current Y: " + Y + " aboveYcentre: " + aboveYcentre);
                             System.out.println("Current col: " + row + " above: " + above);
                             Point abovePoint = grid[above][col].point;
-                            grid[above][col].rePositionY( NButton.this.point, row, col, NButton.this.getYcentre() );
                             grid[row][col] = grid[above][col];
-                            grid[above][col] = NButton.this;
+                            grid[above][col].rePositionY( NButton.this.point, row, col, NButton.this.getYcentre() );
                             NButton.this.rePositionY(abovePoint, above, col, aboveYcentre);
+                            grid[above][col] = NButton.this;
                         }
                     }
                 } else if( Y > prevY ) {
@@ -241,10 +241,10 @@ public class NButton extends JButton {
                             System.out.println("Current Y: " + Y + " belowYcentre: " + belowYcentre);
                             System.out.println("Current col: " + row + " below: " + below);
                             Point belowPoint = grid[below][col].point;
-                            grid[below][col].rePositionY( NButton.this.point, row, col, NButton.this.getYcentre() );
                             grid[row][col] = grid[below][col];
-                            grid[below][col] = NButton.this;
+                            grid[below][col].rePositionY( NButton.this.point, row, col, NButton.this.getYcentre() );
                             NButton.this.rePositionY(belowPoint, below, col, belowYcentre);
+                            grid[below][col] = NButton.this;
                         }
                     }
                 }
