@@ -176,7 +176,7 @@ public class NButton extends JButton {
                 int Y = E.getY() + getY() - GalleryUI.BHEIGHT / 2; // - BHEIGHT / 2  so we are dragging from the centre
                 moveTo(X, Y);
 
-                if( X < prevX ) {
+                if( X < prevX /* + GalleryUI.BWIDTH/2 */ ) {
 //                    System.out.println("Moving Left  X: " + X + " prevX: " + prevX);
                     // look to left neighbor  but what if we are the left most??
                     if( col > 0 ) {
@@ -198,7 +198,7 @@ public class NButton extends JButton {
                         }
                     }
 
-                } else if( X > prevX ) {
+                } else if( X > prevX /* - GalleryUI.BWIDTH/2 */) {
 //                    System.out.println("Moving Right");
                     if( col < 3 ) {
                         int right = col + 1;
@@ -210,12 +210,10 @@ public class NButton extends JButton {
                             System.out.println("Current X: " + X + " rightXcentre: " + rightXcentre);
                             System.out.println("Current col: " + col + " right: " + right);
                             Point rightPoint = grid[row][right].point;
-//                            NButton.this.x_centre = grid[row][right].getXcentre();
                             grid[row][right].rePosition( NButton.this.point, row, col, NButton.this.getXcentre() );
                             grid[row][col] = grid[row][right];
                             grid[row][right] = NButton.this;
                             NButton.this.rePosition(rightPoint, row, right, rightXcentre);
-//                            NButton.this.col = right;
                         }
 
                     }
@@ -226,11 +224,10 @@ public class NButton extends JButton {
                         int above = row - 1;
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         int aboveYcentre = grid[above][col].getYcentre();
-                        if( Y > aboveYcentre) {
+                        if( Y < aboveYcentre  ) {
                             System.out.println("Current Y: " + Y + " aboveYcentre: " + aboveYcentre);
                             System.out.println("Current col: " + row + " above: " + above);
                             Point abovePoint = grid[above][col].point;
-//                            NButton.this.Y_centre = grid[row][above].getYcentre();
                             grid[above][col].rePositionY( NButton.this.point, row, col, NButton.this.getYcentre() );
                             grid[row][col] = grid[above][col];
                             grid[above][col] = NButton.this;
@@ -243,8 +240,8 @@ public class NButton extends JButton {
                         int below = row + 1;
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         int belowYcentre = grid[below][col].getYcentre();
-//                        System.out.println("belowYcentre: " + belowYcentre);
-                        if( Y > belowYcentre) {
+                        // On Y the number increases as you go down.
+                        if( Y > belowYcentre ) {
                             System.out.println("Current Y: " + Y + " belowYcentre: " + belowYcentre);
                             System.out.println("Current col: " + row + " below: " + below);
                             Point belowPoint = grid[below][col].point;
