@@ -184,28 +184,24 @@ public class NButton extends JButton {
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         // don't blindly trade rectanges if one is Landscape and the other is potrait.
                         int leftXcentre = grid[row][left].getXcentre();
-//                        System.out.println("leftXcentre: " + leftXcentre);
                         if( X < leftXcentre) {
                             System.out.println("Current X: " + X + " leftXcentre: " + leftXcentre);
                             System.out.println("Current col: " + col + " left: " + left);
                             Point leftPoint = grid[row][left].point;
-//                            NButton.this.x_centre = grid[row][left].getXcentre();
                             grid[row][left].rePosition( NButton.this.point, row, col, NButton.this.getXcentre() );
                             grid[row][col] = grid[row][left];
                             grid[row][left] = NButton.this;
                             NButton.this.rePosition(leftPoint, row, left, leftXcentre);
-//                            NButton.this.col = left;
                         }
                     }
 
-                } else if( X > prevX /* - GalleryUI.BWIDTH/2 */) {
+                } else if( X > prevX ) {
 //                    System.out.println("Moving Right");
                     if( col < 3 ) {
                         int right = col + 1;
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         // don't blindly trade rectanges if one is Landscape and the other is potrait.
                         int rightXcentre = grid[row][right].getXcentre();
-//                        System.out.println("rightXcentre: " + rightXcentre);
                         if( X > rightXcentre) {
                             System.out.println("Current X: " + X + " rightXcentre: " + rightXcentre);
                             System.out.println("Current col: " + col + " right: " + right);
@@ -245,7 +241,6 @@ public class NButton extends JButton {
                             System.out.println("Current Y: " + Y + " belowYcentre: " + belowYcentre);
                             System.out.println("Current col: " + row + " below: " + below);
                             Point belowPoint = grid[below][col].point;
-//                            NButton.this.Y_centre = grid[row][below].getYcentre();
                             grid[below][col].rePositionY( NButton.this.point, row, col, NButton.this.getYcentre() );
                             grid[row][col] = grid[below][col];
                             grid[below][col] = NButton.this;
