@@ -22,7 +22,7 @@ public class NButton extends JButton {
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
     protected Orientation orientation;
-    protected int x_centre, y_centre, prevX, prevY;
+    protected int x_centre, y_centre, prevX, prevY, portrait_offset = 0;
     protected Rectangle rectangle;
     protected Point point;
 
@@ -57,7 +57,7 @@ public class NButton extends JButton {
                 }
             } else if ('i' == keyChar || 'I' == keyChar) {
                 int left = col;
-                if(col > 0) {
+                if (col > 0) {
                     left = col - 1;
                 }
                 System.out.println("Xcentre: " + x_centre + "  Column: " + col + " leftXcentre: " + grid[row][left].getXcentre());
@@ -84,6 +84,7 @@ public class NButton extends JButton {
         this.width = width;
         this.height = height;
         if (width > height) {
+            this.orientation = Orientation.Landscape;
             this.diff = (width - height) / 2;
         } else {
             this.diff = (height - width) / 2;
@@ -96,12 +97,15 @@ public class NButton extends JButton {
         if (Orientation.Landscape == this.orientation) {
             this.setBounds(X + diff, Y, height, width);
             this.orientation = Orientation.Portrait;
+            this.portrait_offset = diff;
         } else {
             this.setBounds(X - diff, Y, height, width); // we want this
             this.orientation = Orientation.Landscape;
+            this.portrait_offset = 0;
         }
     }
 
+    // moveLeft and moveRight were just test methods
     void moveLeft() {
         this.moveTo(X - diff, Y);
     }
@@ -135,11 +139,14 @@ public class NButton extends JButton {
         this.height = height;
     }
 
-    public void setInitialBounds(int x, int y, int width, int height) {
-        setBounds(x, y, width, height);
+    public void setInitialBounds(int x, int portrait_offset, int y, int width, int height) {
+        setBounds(x + portrait_offset, y, width, height);
+        if (0 < portrait_offset) {
+            System.out.println("portrait_offset: " + portrait_offset);
+        }
         this.point = new Point(x, y);
-//        this.rectangle = new Rectangle(x, y, width, height);
-        this.x_centre = x + this.diff;
+        this.portrait_offset = portrait_offset;
+        this.x_centre = x + portrait_offset + this.diff;  // So we get the centre not the corner
         this.y_centre = y;
     }
 
@@ -173,58 +180,57 @@ public class NButton extends JButton {
             public void mouseDragged(MouseEvent E) {
                 int X = E.getX() + getX() - GalleryUI.BWIDTH / 2;  // - BWIDTH / 2  so we are dragging from the centre
                 int Y = E.getY() + getY() - GalleryUI.BHEIGHT / 2; // - BHEIGHT / 2  so we are dragging from the centre
-                moveTo(X, Y);
+                moveTo(X, Y);   // We could try to lock the moving so that diagonal swaps are not possible
 
-                if( X < prevX ) {
+                if (X < prevX) {
 //                    System.out.println("Moving Left  X: " + X + " prevX: " + prevX);
                     // look to left neighbor  but what if we are the left most??
-                    if( col > 0 ) {
-                        int other = col - 1;
+                    if (col > 0) {
+                        int left = col - 1;
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         // don't blindly trade rectanges if one is Landscape and the other is potrait.
-                        int otherXcentre = grid[row][other].getXcentre();
-                        if( X < otherXcentre) {
-                            System.out.println("Current X: " + X + " leftXcentre: " + otherXcentre);
-                            System.out.println("Current col: " + col + " left: " + other);
-                            swapXpositions(other, otherXcentre);
+                        int leftXcentre = grid[row][left].getXcentre();
+                        if (X < leftXcentre) {
+                            System.out.println("Current X: " + X + " leftXcentre: " + leftXcentre);
+                            System.out.println("Current col: " + col + " left: " + left);
+                            swapXpositions(left, leftXcentre);
                         }
                     }
 
-                } else if( X > prevX ) {
+                } else if (X > prevX) {
 //                    System.out.println("Moving Right");
-                    if( col < 3 ) {
-                        int other = col + 1;
+                    if (col < 3) {
+                        int right = col + 1;
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         // don't blindly trade rectanges if one is Landscape and the other is potrait.
-                        int otherXcentre = grid[row][other].getXcentre();
-                        if( X > otherXcentre) {
-                            System.out.println("Current X: " + X + " rightXcentre: " + otherXcentre);
-                            System.out.println("Current col: " + col + " right: " + other);
-                            swapXpositions(other, otherXcentre);
+                        int rightXcentre = grid[row][right].getXcentre();
+                        if (X > rightXcentre) {
+                            System.out.println("Current X: " + X + " rightXcentre: " + rightXcentre);
+                            System.out.println("Current col: " + col + " right: " + right);
+                            swapXpositions(right, rightXcentre);
                         }
 
                     }
-                }
-                else if( Y < prevY ) {
+                } else if (Y < prevY) {
                     System.out.println("Moving Up");
-                    if( row > 0 ) {
+                    if (row > 0) {
                         int other = row - 1;
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         int otherYcentre = grid[other][col].getYcentre();
-                        if( Y < otherYcentre  ) {
+                        if (Y < otherYcentre) {
                             System.out.println("Current Y: " + Y + " aboveYcentre: " + otherYcentre);
                             System.out.println("Current col: " + row + " above: " + other);
                             swapYpositions(other, otherYcentre);
                         }
                     }
-                } else if( Y > prevY ) {
+                } else if (Y > prevY) {
                     System.out.println("Moving Down");
-                    if( row < 3 ) {
+                    if (row < 3) {
                         int other = row + 1;
                         // Watch out for Pictures in Portrait. Currently not handling this correctly
                         int otherYcentre = grid[other][col].getYcentre();
                         // On Y the number increases as you go down.
-                        if( Y > otherYcentre ) {
+                        if (Y > otherYcentre) {
                             System.out.println("Current Y: " + Y + " belowYcentre: " + otherYcentre);
                             System.out.println("Current col: " + row + " below: " + other);
                             swapYpositions(other, otherYcentre);
@@ -250,7 +256,7 @@ public class NButton extends JButton {
             public void mouseReleased(MouseEvent e) {
                 System.out.println("Mouse released x: " + getX() + " y: " + getY() + " " + getBounds());
                 NButton that = NButton.this;
-                setBounds(that.point.x, that.point.y, that.width, that.height);
+                setBounds(that.point.x + portrait_offset, that.point.y, that.width, that.height);
             }
 
             @Override
@@ -284,7 +290,7 @@ public class NButton extends JButton {
     void swapYpositions(int other, int otherYcentre) {
         Point otherPoint = grid[other][col].point;
         grid[row][col] = grid[other][col];
-        grid[other][col].rePositionY( NButton.this.point, row, col, NButton.this.getYcentre() );
+        grid[other][col].rePositionY(NButton.this.point, row, col, NButton.this.getYcentre());
         NButton.this.rePositionY(otherPoint, other, col, otherYcentre);
         grid[other][col] = NButton.this;
     }
@@ -292,13 +298,13 @@ public class NButton extends JButton {
     void swapXpositions(int other, int otherXcentre) {
         Point otherPoint = grid[row][other].point;
         grid[row][col] = grid[row][other];
-        grid[row][other].rePosition( NButton.this.point, row, col, NButton.this.getXcentre() );
+        grid[row][other].rePosition(NButton.this.point, row, col, NButton.this.getXcentre());
         NButton.this.rePosition(otherPoint, row, other, otherXcentre);
         grid[row][other] = NButton.this;
     }
 
     protected void rePosition(Point point, int row, int col, int x_centre) {
-        setBounds(point.x, point.y, width, height);
+        setBounds(point.x + portrait_offset, point.y, width, height);
         this.point = point;
         this.row = row;
         this.col = col;
@@ -306,10 +312,18 @@ public class NButton extends JButton {
     }
 
     protected void rePositionY(Point point, int row, int col, int y_centre) {
-        setBounds(point.x, point.y, width, height);
+        setBounds(point.x + portrait_offset, point.y, width, height);
         this.point = point;
         this.row = row;
         this.col = col;
         this.y_centre = y_centre;
+    }
+
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
     }
 }
