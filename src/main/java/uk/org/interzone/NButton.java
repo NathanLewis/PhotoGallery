@@ -187,8 +187,6 @@ public class NButton extends JButton {
                     // look to left neighbor  but what if we are the left most??
                     if (col > 0) {
                         int left = col - 1;
-                        // Watch out for Pictures in Portrait. Currently not handling this correctly
-                        // don't blindly trade rectanges if one is Landscape and the other is potrait.
                         int leftXcentre = grid[row][left].getXcentre();
                         if (X < leftXcentre) {
                             System.out.println("Current X: " + X + " leftXcentre: " + leftXcentre);
@@ -201,8 +199,6 @@ public class NButton extends JButton {
 //                    System.out.println("Moving Right");
                     if (col < 3) {
                         int right = col + 1;
-                        // Watch out for Pictures in Portrait. Currently not handling this correctly
-                        // don't blindly trade rectanges if one is Landscape and the other is potrait.
                         int rightXcentre = grid[row][right].getXcentre();
                         if (X > rightXcentre) {
                             System.out.println("Current X: " + X + " rightXcentre: " + rightXcentre);
@@ -215,7 +211,6 @@ public class NButton extends JButton {
                     System.out.println("Moving Up");
                     if (row > 0) {
                         int other = row - 1;
-                        // Watch out for Pictures in Portrait. Currently not handling this correctly
                         int otherYcentre = grid[other][col].getYcentre();
                         if (Y < otherYcentre) {
                             System.out.println("Current Y: " + Y + " aboveYcentre: " + otherYcentre);
@@ -227,7 +222,6 @@ public class NButton extends JButton {
                     System.out.println("Moving Down");
                     if (row < 3) {
                         int other = row + 1;
-                        // Watch out for Pictures in Portrait. Currently not handling this correctly
                         int otherYcentre = grid[other][col].getYcentre();
                         // On Y the number increases as you go down.
                         if (Y > otherYcentre) {
