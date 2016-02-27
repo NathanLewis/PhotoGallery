@@ -13,9 +13,9 @@ import java.util.Set;
  */
 public class NButton extends JButton {
     protected final Set<NButton> selectedButtons;
+    protected final NButton[][] grid;
     private final int diff;
     private final Image image;
-    private final NButton[][] grid;
     protected boolean bSelected = false;
     protected int row, col;
     protected int X, Y, width, height;
@@ -26,54 +26,7 @@ public class NButton extends JButton {
     protected Rectangle rectangle;
     protected Point point;
 
-    protected KeyListener keyListener = new KeyListener() {
-        @Override
-        public void keyTyped(KeyEvent e) {
-            char keyChar = e.getKeyChar();
-//            System.out.println("typed: " + keyChar);
-            if ('r' == keyChar || 'R' == keyChar) {
-                try {
-                    for (NButton selected : selectedButtons) {
-                        selected.rotateRight();
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            } else if ('l' == keyChar || 'L' == keyChar) {
-                try {
-                    for (NButton selected : selectedButtons) {
-                        selected.rotateLeft();
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            } else if ('h' == keyChar || 'H' == keyChar) {
-                for (NButton selected : selectedButtons) {
-                    selected.moveLeft();
-                }
-            } else if ('j' == keyChar || 'J' == keyChar) {
-                for (NButton selected : selectedButtons) {
-                    selected.moveRight();
-                }
-            } else if ('i' == keyChar || 'I' == keyChar) {
-                int left = col;
-                if (col > 0) {
-                    left = col - 1;
-                }
-                System.out.println("Xcentre: " + x_centre + "  Column: " + col + " leftXcentre: " + grid[row][left].getXcentre());
-            }
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-
-        }
-    };
+    protected KeyListener keyListener = new MouseKeyListener(this);
 
     public NButton(Image image, int row, int col, Set<NButton> selectedButtons, NButton[][] grid, int width, int height) {
         this.image = image;
@@ -93,7 +46,7 @@ public class NButton extends JButton {
         this.setIcon(new ImageIcon(image.toString()));
     }
 
-    protected void setNewOrientation() {
+    protected void toggleOrientation() {
         if (Orientation.Landscape == this.orientation) {
             this.setBounds(X + diff, Y, height, width);
             this.orientation = Orientation.Portrait;
@@ -120,13 +73,13 @@ public class NButton extends JButton {
 
     void rotateLeft() throws IOException {
         System.out.println("Rotating " + image.toString() + ", col " + col + " left");
-        setNewOrientation();
+        toggleOrientation();
         this.setIcon(new ImageIcon(image.rotateLeft()));
     }
 
     void rotateRight() throws IOException {
         System.out.println("Rotating " + image.toString() + ", col " + col + " right");
-        setNewOrientation();
+        toggleOrientation();
         this.setIcon(new ImageIcon(image.rotateRight()));
     }
 
@@ -162,107 +115,11 @@ public class NButton extends JButton {
         this.bSelected = false;
     }
 
-    public boolean isSelected() {
-        return bSelected;
-    }
-
-    public int getXcentre() {
-        return x_centre;
-    }
-
-    public int getYcentre() {
-        return y_centre;
-    }
-
     protected void addEventHandling() {
-        addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent E) {
-                int X = E.getX() + getX() - GalleryUI.BWIDTH / 2;  // - BWIDTH / 2  so we are dragging from the centre
-                int Y = E.getY() + getY() - GalleryUI.BHEIGHT / 2; // - BHEIGHT / 2  so we are dragging from the centre
-                moveTo(X, Y);   // We could try to lock the moving so that diagonal swaps are not possible
+        addMouseMotionListener(new MouseMovementAdapter(this));
 
-                if (X < prevX) {
-//                    System.out.println("Moving Left  X: " + X + " prevX: " + prevX);
-                    // look to left neighbor  but what if we are the left most??
-                    if (col > 0) {
-                        int left = col - 1;
-                        int leftXcentre = grid[row][left].getXcentre();
-                        if (X < leftXcentre) {
-                            System.out.println("Current X: " + X + " leftXcentre: " + leftXcentre);
-                            System.out.println("Current col: " + col + " left: " + left);
-                            swapXpositions(left, leftXcentre);
-                        }
-                    }
+        addMouseListener(new MouseEventListener(this));
 
-                } else if (X > prevX) {
-//                    System.out.println("Moving Right");
-                    if (col < 3) {
-                        int right = col + 1;
-                        int rightXcentre = grid[row][right].getXcentre();
-                        if (X > rightXcentre) {
-                            System.out.println("Current X: " + X + " rightXcentre: " + rightXcentre);
-                            System.out.println("Current col: " + col + " right: " + right);
-                            swapXpositions(right, rightXcentre);
-                        }
-
-                    }
-                } else if (Y < prevY) {
-                    System.out.println("Moving Up");
-                    if (row > 0) {
-                        int other = row - 1;
-                        int otherYcentre = grid[other][col].getYcentre();
-                        if (Y < otherYcentre) {
-                            System.out.println("Current Y: " + Y + " aboveYcentre: " + otherYcentre);
-                            System.out.println("Current col: " + row + " above: " + other);
-                            swapYpositions(other, otherYcentre);
-                        }
-                    }
-                } else if (Y > prevY) {
-                    System.out.println("Moving Down");
-                    if (row < 3) {
-                        int other = row + 1;
-                        int otherYcentre = grid[other][col].getYcentre();
-                        // On Y the number increases as you go down.
-                        if (Y > otherYcentre) {
-                            System.out.println("Current Y: " + Y + " belowYcentre: " + otherYcentre);
-                            System.out.println("Current col: " + row + " below: " + other);
-                            swapYpositions(other, otherYcentre);
-                        }
-                    }
-                }
-                prevX = X;
-                prevY = Y;
-            }
-        });
-        addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-//                System.out.println("mouseClicked");
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-//                System.out.println("mousePressed");
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                System.out.println("Mouse released x: " + getX() + " y: " + getY() + " " + getBounds());
-                NButton that = NButton.this;
-                setBounds(that.point.x + portrait_offset, that.point.y, that.width, that.height);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-//                System.out.println("mouseEntered");
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-//                System.out.println("mouseExited");
-            }
-        });
         addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // when the shift button is pressed
@@ -320,4 +177,17 @@ public class NButton extends JButton {
     public void setOrientation(Orientation orientation) {
         this.orientation = orientation;
     }
+
+    public boolean isSelected() {
+        return bSelected;
+    }
+
+    public int getXcentre() {
+        return x_centre;
+    }
+
+    public int getYcentre() {
+        return y_centre;
+    }
+
 }
