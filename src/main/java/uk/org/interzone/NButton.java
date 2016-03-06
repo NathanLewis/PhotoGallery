@@ -17,14 +17,14 @@ public class NButton extends JButton {
     private final int diff;
     private final Image image;
     protected boolean bSelected = false;
+    protected Orientation orientation;
     protected int row, col;
     protected int X, Y, width, height;
+    protected int x_centre, y_centre, prevX, prevY, portrait_offset = 0;
+    protected Point point;
     protected Border emptyBorder = BorderFactory.createEmptyBorder();
     protected Border selectedBorder = new LineBorder(Color.YELLOW, 2);
-    protected Orientation orientation;
-    protected int x_centre, y_centre, prevX, prevY, portrait_offset = 0;
-    protected Rectangle rectangle;
-    protected Point point;
+    protected static Icon initialIcon;
 
     protected KeyListener keyListener = new MouseKeyListener(this);
 
@@ -43,6 +43,7 @@ public class NButton extends JButton {
             this.diff = (height - width) / 2;
         }
         this.orientation = image.getOrientation();
+        initialIcon = this.getIcon();
         this.setIcon(new ImageIcon(image.toString()));
     }
 

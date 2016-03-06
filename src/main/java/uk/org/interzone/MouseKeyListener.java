@@ -48,6 +48,20 @@ class MouseKeyListener implements KeyListener {
                 left = nButton.col - 1;
             }
             System.out.println("Xcentre: " + nButton.x_centre + "  Column: " + nButton.col + " leftXcentre: " + nButton.grid[nButton.row][left].getXcentre());
+        } else if ('d' == keyChar || 'D' == keyChar) {
+            System.out.println("delete");
+            // the button self destructs
+            nButton.setIcon(NButton.initialIcon); // blank the icon
+            // remove all listeners
+//            nButton.removeKeyListener(this);
+            nButton.deselect();
+//            nButton.removeActionListener(nButton.getActionListeners()[0]);
+//            nButton.removeMouseListener(nButton.g);
+            // give up its place and delete the picture
+            // delete the button and move everything after it over by one
+
+            // one way to do this might be to swap with each successive button
+            // until it is at the end and then grab the next picture.
         }
     }
 
