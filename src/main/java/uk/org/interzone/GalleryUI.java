@@ -32,7 +32,7 @@ public class GalleryUI extends JFrame {
         if (images.size() == 0) {
             return;
         }
-        NButton grid[][] = new NButton[numRows][numCols];
+        Slot grid[][] = new Slot[numRows][numCols];
 
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
@@ -50,7 +50,7 @@ public class GalleryUI extends JFrame {
                     button.setInitialBounds(X, (BWIDTH - BHEIGHT)/2, Y, BHEIGHT, BWIDTH);
                 }
                 button.addEventHandling();
-                grid[row][col] = button;
+                grid[row][col] = new Slot(button);
                 ind++;
             }
         }

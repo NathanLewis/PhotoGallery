@@ -24,7 +24,7 @@ class MouseMovementAdapter extends MouseAdapter {
             // look to left neighbor  but what if we are the left most??
             if (nButton.col > 0) {
                 int left = nButton.col - 1;
-                int leftXcentre = nButton.grid[nButton.row][left].getXcentre();
+                int leftXcentre = nButton.grid[nButton.row][left].getnButton().getXcentre();
                 if (X < leftXcentre) {
                     System.out.println("Current X: " + X + " leftXcentre: " + leftXcentre);
                     System.out.println("Current col: " + nButton.col + " left: " + left);
@@ -36,7 +36,7 @@ class MouseMovementAdapter extends MouseAdapter {
 //                    System.out.println("Moving Right");
             if (nButton.col < 3) {
                 int right = nButton.col + 1;
-                int rightXcentre = nButton.grid[nButton.row][right].getXcentre();
+                int rightXcentre = nButton.grid[nButton.row][right].getnButton().getXcentre();
                 if (X > rightXcentre) {
                     System.out.println("Current X: " + X + " rightXcentre: " + rightXcentre);
                     System.out.println("Current col: " + nButton.col + " right: " + right);
@@ -48,7 +48,7 @@ class MouseMovementAdapter extends MouseAdapter {
             System.out.println("Moving Up");
             if (nButton.row > 0) {
                 int other = nButton.row - 1;
-                int otherYcentre = nButton.grid[other][nButton.col].getYcentre();
+                int otherYcentre = nButton.grid[other][nButton.col].getnButton().getYcentre();
                 if (Y < otherYcentre) {
                     System.out.println("Current Y: " + Y + " aboveYcentre: " + otherYcentre);
                     System.out.println("Current col: " + nButton.row + " above: " + other);
@@ -59,7 +59,7 @@ class MouseMovementAdapter extends MouseAdapter {
             System.out.println("Moving Down");
             if (nButton.row < 3) {
                 int other = nButton.row + 1;
-                int otherYcentre = nButton.grid[other][nButton.col].getYcentre();
+                int otherYcentre = nButton.grid[other][nButton.col].getnButton().getYcentre();
                 // On Y the number increases as you go down.
                 if (Y > otherYcentre) {
                     System.out.println("Current Y: " + Y + " belowYcentre: " + otherYcentre);

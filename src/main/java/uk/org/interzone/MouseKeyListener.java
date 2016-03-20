@@ -47,7 +47,7 @@ class MouseKeyListener implements KeyListener {
             if (nButton.col > 0) {
                 left = nButton.col - 1;
             }
-            System.out.println("Xcentre: " + nButton.x_centre + "  Column: " + nButton.col + " leftXcentre: " + nButton.grid[nButton.row][left].getXcentre());
+            System.out.println("Xcentre: " + nButton.x_centre + "  Column: " + nButton.col + " leftXcentre: " + nButton.grid[nButton.row][left].getnButton().getXcentre());
         } else if ('d' == keyChar || 'D' == keyChar) {
             System.out.println("delete");
             // the button self destructs

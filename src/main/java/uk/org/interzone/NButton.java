@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class NButton extends JButton {
     protected final Set<NButton> selectedButtons;
-    protected final NButton[][] grid;
+    protected final Slot[][] grid;
     private final int diff;
     private final Image image;
     protected boolean bSelected = false;
@@ -28,7 +28,7 @@ public class NButton extends JButton {
 
     protected KeyListener keyListener = new MouseKeyListener(this);
 
-    public NButton(Image image, int row, int col, Set<NButton> selectedButtons, NButton[][] grid, int width, int height) {
+    public NButton(Image image, int row, int col, Set<NButton> selectedButtons, Slot[][] grid, int width, int height) {
         this.image = image;
         this.row = row;
         this.col = col;
@@ -140,19 +140,19 @@ public class NButton extends JButton {
     }
 
     void swapYpositions(int other, int otherYcentre) {
-        Point otherPoint = grid[other][col].point;
+        Point otherPoint = grid[other][col].getnButton().point;
         grid[row][col] = grid[other][col];
-        grid[other][col].rePositionY(NButton.this.point, row, col, NButton.this.getYcentre());
+        grid[other][col].getnButton().rePositionY(NButton.this.point, row, col, NButton.this.getYcentre());
         NButton.this.rePositionY(otherPoint, other, col, otherYcentre);
-        grid[other][col] = NButton.this;
+        grid[other][col].setnButton(NButton.this);
     }
 
     void swapXpositions(int other, int otherXcentre) {
-        Point otherPoint = grid[row][other].point;
+        Point otherPoint = grid[row][other].getnButton().point;
         grid[row][col] = grid[row][other];
-        grid[row][other].rePosition(NButton.this.point, row, col, NButton.this.getXcentre());
+        grid[row][other].getnButton().rePosition(NButton.this.point, row, col, NButton.this.getXcentre());
         NButton.this.rePosition(otherPoint, row, other, otherXcentre);
-        grid[row][other] = NButton.this;
+        grid[row][other].setnButton(NButton.this);
     }
 
     protected void rePosition(Point point, int row, int col, int x_centre) {
