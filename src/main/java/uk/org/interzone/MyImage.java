@@ -11,14 +11,14 @@ import java.util.concurrent.Executors;
 /**
  * Created by nathan on 23/01/16.
  */
-public class Image {
+public class MyImage {
     protected Orientation orientation;
     protected File thumbnail;
     protected File original;
     protected int orig_height, orig_width, thumb_height, thumb_width;
     private static Executor executor = Executors.newSingleThreadExecutor();
 
-    public Image(File picfile, String photodir) throws IOException {
+    public MyImage(File picfile, String photodir) throws IOException {
         this.original = picfile;
         getDimensions(original);
         if( orig_width >= orig_height ) {
@@ -26,7 +26,7 @@ public class Image {
             this.thumbnail = ImageUtils.res(picfile.getName(), photodir, GalleryUI.BWIDTH, GalleryUI.BHEIGHT);
         } else {
             this.orientation = Orientation.Portrait;
-            System.out.println(original.getName() + " is in Portrait");
+//            System.out.println(original.getName() + " is in Portrait");
             this.thumbnail = ImageUtils.res(picfile.getName(), photodir, GalleryUI.BHEIGHT, GalleryUI.BWIDTH);
         }
     }
@@ -49,6 +49,8 @@ public class Image {
     public String toString() {
         return thumbnail.toString();
     }
+
+    public String getOriginalPath() { return original.getPath(); }
 
     BufferedImage rotateRight() throws IOException {
         toggleOrientation();
@@ -92,5 +94,9 @@ public class Image {
 
     public Orientation getOrientation() {
         return orientation;
+    }
+
+    public File getOriginalFile() {
+        return original;
     }
 }
